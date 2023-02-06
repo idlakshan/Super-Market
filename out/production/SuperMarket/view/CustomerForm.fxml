@@ -13,8 +13,8 @@
     <children>
         <AnchorPane fx:id="root" layoutX="10.0" layoutY="10.0" prefHeight="542.0" prefWidth="1112.0" style="-fx-background-color: white;">
             <children>
-                <TextField fx:id="txtCode" layoutX="20.0" layoutY="101.0" prefHeight="31.0" prefWidth="321.0" promptText="Code" />
-                <Label layoutX="20.0" layoutY="74.0" text="Customer Code" />
+                <TextField fx:id="txtId" layoutX="20.0" layoutY="101.0" prefHeight="31.0" prefWidth="321.0" promptText="Id" />
+                <Label layoutX="20.0" layoutY="74.0" text="Customer Id" />
                 <TextField fx:id="txtName" layoutX="20.0" layoutY="167.0" prefHeight="31.0" prefWidth="321.0" promptText="Name" />
                 <Label layoutX="20.0" layoutY="140.0" text="Customer Name" />
                 <TextField fx:id="txtAddress" layoutX="20.0" layoutY="239.0" prefHeight="31.0" prefWidth="321.0" promptText="Address" />

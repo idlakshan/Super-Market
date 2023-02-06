@@ -25,7 +25,6 @@ public class DashboardFormController implements Initializable {
 
     }
 
-
     public void customerManage(ActionEvent event) throws IOException {
        customerManage();
     }
