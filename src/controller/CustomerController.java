@@ -106,5 +106,18 @@ public class CustomerController {
         return customers;
     }
 
+    public static ArrayList<String> loadCustomerIds() throws SQLException, ClassNotFoundException {
+        Connection connection = DbConnection.getInstance().getConnection();
+        PreparedStatement prepareStatement = connection.prepareStatement("select * from customer");
+        ResultSet resultSet = prepareStatement.executeQuery();
+
+        ArrayList<String> customerIds=new ArrayList<>();
+        while (resultSet.next()){
+            customerIds.add(resultSet.getString(1));
+
+        }
+        return customerIds;
+    }
+
 
 }

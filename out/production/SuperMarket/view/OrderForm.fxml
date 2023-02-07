@@ -51,11 +51,12 @@
         </JFXButton>
         <TableView fx:id="tblOrder" layoutX="10.0" layoutY="279.0" prefHeight="195.0" prefWidth="1088.0">
             <columns>
-                <TableColumn fx:id="colCode" prefWidth="203.0" text="Item Code" />
-                <TableColumn fx:id="colName" prefWidth="291.0" text="Item Name" />
-                <TableColumn fx:id="colQty" prefWidth="169.0" text="Qty" />
-                <TableColumn fx:id="colPrice" prefWidth="229.0" text="Unit Price" />
-                <TableColumn fx:id="colTotal" prefWidth="195.0" text="Total" />
+                <TableColumn fx:id="colCode" prefWidth="121.0" text="Item Code" />
+            <TableColumn fx:id="colCusId" prefWidth="148.0" text="Customer ID" />
+                <TableColumn fx:id="colName" prefWidth="303.0" text="Item Name" />
+                <TableColumn fx:id="colQty" prefWidth="187.0" text="Qty" />
+                <TableColumn fx:id="colPrice" prefWidth="179.0" text="Unit Price" />
+                <TableColumn fx:id="colTotal" minWidth="0.0" prefWidth="149.0" text="Total" />
             </columns>
         </TableView>
         <JFXButton layoutX="990.0" layoutY="491.0" onAction="#placeOrderOnAction" prefHeight="38.0" prefWidth="101.0" style="-fx-background-radius: 5px; -fx-background-color: green;" text="Place Order" textFill="WHITE">
@@ -68,7 +69,7 @@
                 <Font name="System Bold" size="23.0" />
             </font>
         </Label>
-        <Label layoutX="109.0" layoutY="496.0" prefHeight="34.0" prefWidth="58.0" text="0.00" textFill="RED">
+        <Label fx:id="lblTotal" layoutX="109.0" layoutY="496.0" prefHeight="26.0" prefWidth="111.0" text="0.00" textFill="RED">
             <font>
                 <Font name="System Bold" size="23.0" />
             </font>

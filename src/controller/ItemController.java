@@ -101,4 +101,16 @@ public class ItemController {
     }
 
 
+    public static ArrayList<String> loadItemIds() throws SQLException, ClassNotFoundException {
+        Connection connection = DbConnection.getInstance().getConnection();
+        PreparedStatement prepareStatement = connection.prepareStatement("select * from item");
+        ResultSet resultSet = prepareStatement.executeQuery();
+
+        ArrayList<String> itemIds=new ArrayList<>();
+        while (resultSet.next()){
+            itemIds.add(resultSet.getString(1));
+
+        }
+        return itemIds;
+    }
 }
