@@ -2,6 +2,7 @@ package view;
 
 import controller.CustomerController;
 import controller.ItemController;
+import controller.OrderController;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -13,6 +14,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Duration;
 import model.Customer;
 import model.Item;
+import model.ItemDetails;
+import model.Order;
 import view.tm.CartTm;
 
 import java.sql.SQLException;
@@ -43,6 +46,8 @@ public class OrderFormController {
     public Label lblTotal;
 
 
+
+    int removeRow=-1;
 
     public void initialize(){
 
@@ -86,6 +91,11 @@ public class OrderFormController {
             }
 
         });
+        tblOrder.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
+           removeRow=(int)newValue;
+            //System.out.println("new value "+removeRow);
+        });
+
 
         }
 
@@ -100,6 +110,7 @@ public class OrderFormController {
             txtPrice.setText(String.valueOf(item.getPrice()));
         }
     }
+
 
     private void setCustomerData(String cusId) throws SQLException, ClassNotFoundException {
         Customer customer = CustomerController.searchCustomer(cusId);
@@ -134,8 +145,13 @@ public class OrderFormController {
 
 
     public void clearOnAction(ActionEvent event) {
-
-
+     if (removeRow==-1){
+         new Alert(Alert.AlertType.WARNING,"please select a row").show();
+     }else {
+         arrayList.remove(removeRow);
+         calculateCost();
+         tblOrder.refresh();
+       }
 
     }
 
@@ -228,11 +244,45 @@ public class OrderFormController {
              ) {
                 total=total+cartTm.getTotal();
         }
-        lblTotal.setText(total+"/=");
+       lblTotal.setText(total+"/=");
     }
 
 
+
+
+
     public void placeOrderOnAction(ActionEvent event) {
+        ArrayList<ItemDetails> items=new ArrayList<>();
+        double total = 0;
+
+
+        for (CartTm cartTm:arrayList
+             ) {
+            
+            total=total+cartTm.getTotal();
+            
+            items.add(new ItemDetails(
+                        cartTm.getCode(),
+                        cartTm.getQty(),
+                        cartTm.getPrice()
+
+            ));
+
+        }
+        Order order=new Order(
+                "O-001",
+                cmbCusIds.getValue(),
+                lblDate.getText(),
+                lblTime.getText(),
+                total,
+                items
+
+        );
+        if (new OrderController().placeOrder(order)){
+            new Alert(Alert.AlertType.CONFIRMATION,"Success").show();
+        }else {
+            new Alert(Alert.AlertType.WARNING,"Error").show();
+        }
 
     }
 
@@ -245,4 +295,5 @@ public class OrderFormController {
         ArrayList<String> itemIds= ItemController.loadItemIds();
         cmbItemIds.getItems().setAll(itemIds);
     }
+
 }

@@ -19,6 +19,10 @@ public class AppInitializer extends Application {
         Scene scene=new Scene(parent);
         primaryStage.setScene(scene);
         primaryStage.setTitle("Login");
+
+
+
+        //primaryStage.setMaximized(true);
         Image image=new Image("view/images/shop.jpg");
         primaryStage.getIcons().add(image);
         primaryStage.centerOnScreen();
