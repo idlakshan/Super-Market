@@ -143,7 +143,6 @@ public class CustomerFormController implements Initializable {
             e.printStackTrace();
         }
 
-
     }
 
     public void loadAllCustomers(){
