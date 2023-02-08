@@ -44,6 +44,7 @@ public class OrderFormController {
     public Label lblDate;
     public Label lblTime;
     public Label lblTotal;
+    public Label lblOrderId;
 
 
 
@@ -59,6 +60,8 @@ public class OrderFormController {
         colTotal.setCellValueFactory(new PropertyValueFactory<>("total"));
 
         loadDateAndTime();
+        setOrderId();
+
         try {
             loadCustomerIds();
             loadItemIds();
@@ -98,6 +101,18 @@ public class OrderFormController {
 
 
         }
+
+    private void setOrderId() {
+
+        try {
+            lblOrderId.setText(new OrderController().getOrderId());
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
 
     private void setItemData(String itemId) throws SQLException, ClassNotFoundException {
         Item item = ItemController.searchItem(itemId);
@@ -287,7 +302,7 @@ public class OrderFormController {
         );
 */
         Order order=new Order();
-        order.setOderId("O-001");
+        order.setOderId(lblOrderId.getText());
         order.setCustomerId(cmbCusIds.getValue());
         order.setOrderDate(lblDate.getText());
         order.setOrderTime(lblTime.getText());
@@ -299,6 +314,7 @@ public class OrderFormController {
 
         if (isSaved){
             new Alert(Alert.AlertType.CONFIRMATION,"Success").show();
+            setOrderId();
         }else {
             new Alert(Alert.AlertType.WARNING,"Error").show();
         }

@@ -24,7 +24,7 @@
                 <Font size="17.0" />
             </font>
         </Label>
-        <Label layoutX="115.0" layoutY="28.0" text="O001">
+        <Label fx:id="lblOrderId" layoutX="115.0" layoutY="28.0" text="O001">
             <font>
                 <Font size="19.0" />
             </font>
