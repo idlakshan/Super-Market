@@ -261,14 +261,21 @@ public class OrderFormController {
             
             total=total+cartTm.getTotal();
             
-            items.add(new ItemDetails(
+            /*items.add(new ItemDetails(
                         cartTm.getCode(),
                         cartTm.getQty(),
                         cartTm.getPrice()
 
-            ));
+            ));*/
+            ItemDetails itemDetails=new ItemDetails();
+            itemDetails.setItemCode(cartTm.getCode());
+            itemDetails.setQtyForSell(cartTm.getQty());
+            itemDetails.setPrice(cartTm.getPrice());
+
+            items.add(itemDetails);
 
         }
+/*
         Order order=new Order(
                 "O-001",
                 cmbCusIds.getValue(),
@@ -278,7 +285,19 @@ public class OrderFormController {
                 items
 
         );
-        if (new OrderController().placeOrder(order)){
+*/
+        Order order=new Order();
+        order.setOderId("O-001");
+        order.setCustomerId(cmbCusIds.getValue());
+        order.setOrderDate(lblDate.getText());
+        order.setOrderTime(lblTime.getText());
+        order.setCost(total);
+        order.setItems(items);
+
+       OrderController orderController= new OrderController();
+        boolean isSaved = orderController.placeOrder(order);
+
+        if (isSaved){
             new Alert(Alert.AlertType.CONFIRMATION,"Success").show();
         }else {
             new Alert(Alert.AlertType.WARNING,"Error").show();

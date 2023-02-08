@@ -2,15 +2,15 @@ package model;
 
 public class ItemDetails {
     private String itemCode;
-    private int qty;
+    private int qtyForSell;
     private double price;
 
     public ItemDetails() {
     }
 
-    public ItemDetails(String itemCode, int qty, double price) {
+    public ItemDetails(String itemCode, int qtyForSell, double price) {
         this.itemCode = itemCode;
-        this.qty = qty;
+        this.qtyForSell = qtyForSell;
         this.price = price;
     }
 
@@ -22,12 +22,12 @@ public class ItemDetails {
         this.itemCode = itemCode;
     }
 
-    public int getQty() {
-        return qty;
+    public int getQtyForSell() {
+        return qtyForSell;
     }
 
-    public void setQty(int qty) {
-        this.qty = qty;
+    public void setQtyForSell(int qtyForSell) {
+        this.qtyForSell = qtyForSell;
     }
 
     public double getPrice() {
@@ -42,7 +42,7 @@ public class ItemDetails {
     public String toString() {
         return "ItemDetails{" +
                 "itemCode='" + itemCode + '\'' +
-                ", qty=" + qty +
+                ", qty=" + qtyForSell +
                 ", price=" + price +
                 '}';
     }
