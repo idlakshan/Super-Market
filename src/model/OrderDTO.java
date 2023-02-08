@@ -2,18 +2,18 @@ package model;
 
 import java.util.ArrayList;
 
-public class Order {
+public class OrderDTO {
     private String oderId;
     private String customerId;
     private String orderDate;
     private String orderTime;
     private double cost;
-    private ArrayList<ItemDetails> items;
+    private ArrayList<ItemDetailsDTO> items;
 
-    public Order() {
+    public OrderDTO() {
     }
 
-    public Order(String oderId, String customerId, String orderDate, String orderTime, double cost, ArrayList<ItemDetails> items) {
+    public OrderDTO(String oderId, String customerId, String orderDate, String orderTime, double cost, ArrayList<ItemDetailsDTO> items) {
         this.oderId = oderId;
         this.customerId = customerId;
         this.orderDate = orderDate;
@@ -62,17 +62,17 @@ public class Order {
         this.cost = cost;
     }
 
-    public ArrayList<ItemDetails> getItems() {
+    public ArrayList<ItemDetailsDTO> getItems() {
         return items;
     }
 
-    public void setItems(ArrayList<ItemDetails> items) {
+    public void setItems(ArrayList<ItemDetailsDTO> items) {
         this.items = items;
     }
 
     @Override
     public String toString() {
-        return "Order{" +
+        return "OrderDTO{" +
                 "oderId='" + oderId + '\'' +
                 ", customerId='" + customerId + '\'' +
                 ", orderDate='" + orderDate + '\'' +

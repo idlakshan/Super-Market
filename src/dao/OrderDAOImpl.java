@@ -1,8 +1,8 @@
-package controller;
+package dao;
 
 import db.DbConnection;
-import model.ItemDetails;
-import model.Order;
+import model.ItemDetailsDTO;
+import model.OrderDTO;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,7 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class OrderController {
+public class OrderDAOImpl {
 
     public String getOrderId() throws SQLException, ClassNotFoundException {
         PreparedStatement statement = DbConnection.getInstance().
@@ -36,21 +36,21 @@ public class OrderController {
     }
 
 
-    public boolean placeOrder(Order order) {
+    public boolean placeOrder(OrderDTO orderDTO) {
         Connection connection=null;
         try {
             connection=DbConnection.getInstance().getConnection();
             connection.setAutoCommit(false);
             PreparedStatement statement = connection.prepareStatement("insert into `order` values(?,?,?,?,?)");
-            statement.setObject(1, order.getOderId());
-            statement.setObject(2, order.getCustomerId());
-            statement.setObject(3, order.getOrderDate());
-            statement.setObject(4, order.getOrderTime());
-            statement.setObject(5, order.getCost());
+            statement.setObject(1, orderDTO.getOderId());
+            statement.setObject(2, orderDTO.getCustomerId());
+            statement.setObject(3, orderDTO.getOrderDate());
+            statement.setObject(4, orderDTO.getOrderTime());
+            statement.setObject(5, orderDTO.getCost());
 
 
             if (statement.executeUpdate() > 0) {
-                if (saveOrderDetails(order.getOderId(), order.getItems())){
+                if (saveOrderDetails(orderDTO.getOderId(), orderDTO.getItems())){
                     connection.commit();
                         return true;
                 }else {
@@ -80,18 +80,18 @@ public class OrderController {
         return false;
     }
 
-    private boolean saveOrderDetails(String orderId, ArrayList<ItemDetails> items) throws SQLException, ClassNotFoundException {
-        for (ItemDetails itemDetails : items
+    private boolean saveOrderDetails(String orderId, ArrayList<ItemDetailsDTO> items) throws SQLException, ClassNotFoundException {
+        for (ItemDetailsDTO itemDetailsDTO : items
         ) {
             PreparedStatement statement = DbConnection.getInstance().
                     getConnection().prepareStatement("insert into `order detail` values(?,?,?,?)");
-            statement.setObject(1, itemDetails.getItemCode());
+            statement.setObject(1, itemDetailsDTO.getItemCode());
             statement.setObject(2, orderId);
-            statement.setObject(3, itemDetails.getQtyForSell());
-            statement.setObject(4, itemDetails.getPrice());
+            statement.setObject(3, itemDetailsDTO.getQtyForSell());
+            statement.setObject(4, itemDetailsDTO.getPrice());
 
             if (statement.executeUpdate() > 0) {
-                if (updateQty(itemDetails.getItemCode(), itemDetails.getQtyForSell())) {
+                if (updateQty(itemDetailsDTO.getItemCode(), itemDetailsDTO.getQtyForSell())) {
 
                 } else {
                     return false;

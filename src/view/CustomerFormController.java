@@ -1,6 +1,7 @@
 package view;
 
-import controller.CustomerController;
+import dao.CustomerDAO;
+import dao.CustomerDAOImpl;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
@@ -10,7 +11,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
-import model.Customer;
+import model.CustomerDTO;
 
 import java.net.URL;
 import java.sql.SQLException;
@@ -41,14 +42,19 @@ public class CustomerFormController implements Initializable {
         String address = txtAddress.getText();
         String tp = txtTp.getText();
 
-        Customer customer=new Customer();
+     /*   CustomerDTO customer=new CustomerDTO();
         customer.setId(id);
         customer.setName(name);
         customer.setAddress(address);
-        customer.setTp(tp);
+        customer.setTp(tp);*/
 
         try {
-            boolean isSaved = CustomerController.saveCustomer(customer);
+           /* ----------------Tight Coupling----------------------
+            CustomerDAOImpl customerDAOImpl = new CustomerDAOImpl();*/
+
+            //--------------Loose Coupling------------------
+            CustomerDAO customerDAO=new CustomerDAOImpl();
+            boolean isSaved = customerDAO.saveCustomer(new CustomerDTO(id, name, address, tp));
 
             if (isSaved){
                 new Alert(Alert.AlertType.INFORMATION,"saved successfully").show();
@@ -71,14 +77,17 @@ public class CustomerFormController implements Initializable {
         String id = txtId.getText();
 
         try {
-            Customer customer = CustomerController.searchCustomer(id);
 
-            txtId.setText(customer.getId());
-            txtName.setText(customer.getName());
-            txtAddress.setText(customer.getAddress());
-            txtTp.setText(customer.getTp());
+            //--------------Loose Coupling------------------
+            CustomerDAO customerDAO=new CustomerDAOImpl();
+            CustomerDTO customerDTO = customerDAO.searchCustomer(id);
 
-           /* if (customer.equals(null)){
+            txtId.setText(customerDTO.getId());
+            txtName.setText(customerDTO.getName());
+            txtAddress.setText(customerDTO.getAddress());
+            txtTp.setText(customerDTO.getTp());
+
+           /* if (customerDTO.equals(null)){
                 new Alert(Alert.AlertType.WARNING,"Error").show();
             }*/
 
@@ -97,15 +106,17 @@ public class CustomerFormController implements Initializable {
         String name = txtName.getText();
         String address = txtAddress.getText();
         String tp = txtTp.getText();
-
-        Customer customer=new Customer();
+/*
+        CustomerDTO customer=new CustomerDTO();
         customer.setId(id);
         customer.setName(name);
         customer.setAddress(address);
-        customer.setTp(tp);
+        customer.setTp(tp);*/
 
         try {
-            boolean isUpdated = CustomerController.updateCustomer(customer);
+            //--------------Loose Coupling------------------
+            CustomerDAO customerDAO=new CustomerDAOImpl();
+            boolean isUpdated = customerDAO.updateCustomer(new CustomerDTO(id, name, address, tp));
 
             if (isUpdated){
                 new Alert(Alert.AlertType.INFORMATION,"Updated successfully").show();
@@ -127,7 +138,9 @@ public class CustomerFormController implements Initializable {
         String id = txtId.getText();
 
         try {
-            boolean isDeleted = CustomerController.deleteCustomer(id);
+            //--------------Loose Coupling------------------
+            CustomerDAO customerDAO=new CustomerDAOImpl();
+            boolean isDeleted = customerDAO.deleteCustomer(id);
 
             if (isDeleted){
                 new Alert(Alert.AlertType.INFORMATION,"Deleted successfully").show();
@@ -148,7 +161,9 @@ public class CustomerFormController implements Initializable {
     public void loadAllCustomers(){
 
         try {
-            ArrayList<Customer> customers = CustomerController.loadAllCustomers();
+            //--------------Loose Coupling------------------
+            CustomerDAO customerDAO=new CustomerDAOImpl();
+            ArrayList<CustomerDTO> customerDTOS = customerDAO.loadAllCustomers();
 
             colCode.setCellValueFactory(new PropertyValueFactory<>("id"));
             colName.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -158,7 +173,7 @@ public class CustomerFormController implements Initializable {
 
 
             tblCustomer.getColumns().setAll(colCode,colName,colAddress,colTp);
-            tblCustomer.setItems(FXCollections.observableArrayList(customers));
+            tblCustomer.setItems(FXCollections.observableArrayList(customerDTOS));
 
 
         } catch (SQLException e) {

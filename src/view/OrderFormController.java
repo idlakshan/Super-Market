@@ -1,21 +1,20 @@
 package view;
 
-import controller.CustomerController;
-import controller.ItemController;
-import controller.OrderController;
+import dao.CustomerDAOImpl;
+import dao.ItemDAOImpl;
+import dao.OrderDAOImpl;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Duration;
-import model.Customer;
-import model.Item;
-import model.ItemDetails;
-import model.Order;
+import model.CustomerDTO;
+import model.ItemDTO;
+import model.ItemDetailsDTO;
+import model.OrderDTO;
 import view.tm.CartTm;
 
 import java.sql.SQLException;
@@ -105,7 +104,7 @@ public class OrderFormController {
     private void setOrderId() {
 
         try {
-            lblOrderId.setText(new OrderController().getOrderId());
+            lblOrderId.setText(new OrderDAOImpl().getOrderId());
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -115,26 +114,34 @@ public class OrderFormController {
     }
 
     private void setItemData(String itemId) throws SQLException, ClassNotFoundException {
-        Item item = ItemController.searchItem(itemId);
 
-        if (item==null){
+        ItemDAOImpl itemDAO = new ItemDAOImpl();
+        ItemDTO itemDTO = itemDAO.searchItem(itemId);
+
+        //ItemDTO itemDTO = ItemDAOImpl.searchItem(itemId);
+
+        if (itemDTO ==null){
             new Alert(Alert.AlertType.WARNING,"Empty results set");
         }else{
-            txtItemName.setText(item.getName());
-            txtQtyOnHand.setText(String.valueOf(item.getQtyOnHand()));
-            txtPrice.setText(String.valueOf(item.getPrice()));
+            txtItemName.setText(itemDTO.getName());
+            txtQtyOnHand.setText(String.valueOf(itemDTO.getQtyOnHand()));
+            txtPrice.setText(String.valueOf(itemDTO.getPrice()));
         }
     }
 
 
     private void setCustomerData(String cusId) throws SQLException, ClassNotFoundException {
-        Customer customer = CustomerController.searchCustomer(cusId);
-        if (customer==null){
+        CustomerDAOImpl customerDAOImpl=new CustomerDAOImpl();
+        CustomerDTO customerDTO = customerDAOImpl.searchCustomer(cusId);
+
+        // CustomerDTO customerDTO = CustomerDAOImpl.searchCustomer(cusId);
+
+        if (customerDTO ==null){
             new Alert(Alert.AlertType.WARNING,"Empty results set");
         }else {
-           txtCusName.setText(customer.getName());
-           txtAddress.setText(customer.getAddress());
-           txtTp.setText(customer.getTp());
+           txtCusName.setText(customerDTO.getName());
+           txtAddress.setText(customerDTO.getAddress());
+           txtTp.setText(customerDTO.getTp());
 
 
         }
@@ -267,7 +274,7 @@ public class OrderFormController {
 
 
     public void placeOrderOnAction(ActionEvent event) {
-        ArrayList<ItemDetails> items=new ArrayList<>();
+        ArrayList<ItemDetailsDTO> items=new ArrayList<>();
         double total = 0;
 
 
@@ -276,22 +283,22 @@ public class OrderFormController {
             
             total=total+cartTm.getTotal();
             
-            /*items.add(new ItemDetails(
+            /*items.add(new ItemDetailsDTO(
                         cartTm.getCode(),
                         cartTm.getQty(),
                         cartTm.getPrice()
 
             ));*/
-            ItemDetails itemDetails=new ItemDetails();
-            itemDetails.setItemCode(cartTm.getCode());
-            itemDetails.setQtyForSell(cartTm.getQty());
-            itemDetails.setPrice(cartTm.getPrice());
+            ItemDetailsDTO itemDetailsDTO =new ItemDetailsDTO();
+            itemDetailsDTO.setItemCode(cartTm.getCode());
+            itemDetailsDTO.setQtyForSell(cartTm.getQty());
+            itemDetailsDTO.setPrice(cartTm.getPrice());
 
-            items.add(itemDetails);
+            items.add(itemDetailsDTO);
 
         }
 /*
-        Order order=new Order(
+        OrderDTO orderDTO=new OrderDTO(
                 "O-001",
                 cmbCusIds.getValue(),
                 lblDate.getText(),
@@ -301,16 +308,16 @@ public class OrderFormController {
 
         );
 */
-        Order order=new Order();
-        order.setOderId(lblOrderId.getText());
-        order.setCustomerId(cmbCusIds.getValue());
-        order.setOrderDate(lblDate.getText());
-        order.setOrderTime(lblTime.getText());
-        order.setCost(total);
-        order.setItems(items);
+        OrderDTO orderDTO =new OrderDTO();
+        orderDTO.setOderId(lblOrderId.getText());
+        orderDTO.setCustomerId(cmbCusIds.getValue());
+        orderDTO.setOrderDate(lblDate.getText());
+        orderDTO.setOrderTime(lblTime.getText());
+        orderDTO.setCost(total);
+        orderDTO.setItems(items);
 
-       OrderController orderController= new OrderController();
-        boolean isSaved = orderController.placeOrder(order);
+       OrderDAOImpl orderDAOImpl = new OrderDAOImpl();
+        boolean isSaved = orderDAOImpl.placeOrder(orderDTO);
 
         if (isSaved){
             new Alert(Alert.AlertType.CONFIRMATION,"Success").show();
@@ -322,12 +329,20 @@ public class OrderFormController {
     }
 
     public void loadCustomerIds() throws SQLException, ClassNotFoundException {
-        ArrayList<String> customerIds = CustomerController.loadCustomerIds();
+        CustomerDAOImpl customerDAOImpl=new CustomerDAOImpl();
+
+       // ArrayList<String> customerIds = CustomerDAOImpl.loadCustomerIds();
+
+        ArrayList<String> customerIds = customerDAOImpl.loadCustomerIds();
         cmbCusIds.getItems().setAll(customerIds);
 
     }
     public void loadItemIds() throws SQLException, ClassNotFoundException {
-        ArrayList<String> itemIds= ItemController.loadItemIds();
+        ItemDAOImpl itemDAO = new ItemDAOImpl();
+        ArrayList<String> itemIds = itemDAO.loadItemIds();
+
+        // ArrayList<String> itemIds= ItemDAOImpl.loadItemIds();
+
         cmbItemIds.getItems().setAll(itemIds);
     }
 

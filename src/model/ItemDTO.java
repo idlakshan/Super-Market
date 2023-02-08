@@ -1,11 +1,20 @@
 package model;
 
-public class Item {
+public class ItemDTO {
     private String code;
     private String name;
     private int qtyOnHand;
     private double price;
 
+    public ItemDTO() {
+    }
+
+    public ItemDTO(String code, String name, int qtyOnHand, double price) {
+        this.code = code;
+        this.name = name;
+        this.qtyOnHand = qtyOnHand;
+        this.price = price;
+    }
 
     public String getCode() {
         return code;
