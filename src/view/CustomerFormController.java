@@ -30,6 +30,10 @@ public class CustomerFormController implements Initializable {
     public TableColumn colAddress;
     public TableColumn colTp;
 
+    //--------------Loose Coupling------------------
+    //--------------Property Injection--------------
+    private final CustomerDAO customerDAO=new CustomerDAOImpl();
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
          loadAllCustomers();
@@ -52,8 +56,7 @@ public class CustomerFormController implements Initializable {
            /* ----------------Tight Coupling----------------------
             CustomerDAOImpl customerDAOImpl = new CustomerDAOImpl();*/
 
-            //--------------Loose Coupling------------------
-            CustomerDAO customerDAO=new CustomerDAOImpl();
+
             boolean isSaved = customerDAO.saveCustomer(new CustomerDTO(id, name, address, tp));
 
             if (isSaved){
@@ -78,8 +81,7 @@ public class CustomerFormController implements Initializable {
 
         try {
 
-            //--------------Loose Coupling------------------
-            CustomerDAO customerDAO=new CustomerDAOImpl();
+
             CustomerDTO customerDTO = customerDAO.searchCustomer(id);
 
             txtId.setText(customerDTO.getId());
@@ -114,8 +116,6 @@ public class CustomerFormController implements Initializable {
         customer.setTp(tp);*/
 
         try {
-            //--------------Loose Coupling------------------
-            CustomerDAO customerDAO=new CustomerDAOImpl();
             boolean isUpdated = customerDAO.updateCustomer(new CustomerDTO(id, name, address, tp));
 
             if (isUpdated){
@@ -138,8 +138,6 @@ public class CustomerFormController implements Initializable {
         String id = txtId.getText();
 
         try {
-            //--------------Loose Coupling------------------
-            CustomerDAO customerDAO=new CustomerDAOImpl();
             boolean isDeleted = customerDAO.deleteCustomer(id);
 
             if (isDeleted){
@@ -161,8 +159,6 @@ public class CustomerFormController implements Initializable {
     public void loadAllCustomers(){
 
         try {
-            //--------------Loose Coupling------------------
-            CustomerDAO customerDAO=new CustomerDAOImpl();
             ArrayList<CustomerDTO> customerDTOS = customerDAO.loadAllCustomers();
 
             colCode.setCellValueFactory(new PropertyValueFactory<>("id"));

@@ -31,6 +31,11 @@ public class ItemFormController implements Initializable {
     public TableColumn colPrice;
 
 
+    //----Loose Coupling---------
+    //----Property Injection-----
+   private final ItemDAO itemDAO = new ItemDAOImpl();
+
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         loadAllItems();
@@ -49,10 +54,7 @@ public class ItemFormController implements Initializable {
         item.setPrice(price);*/
 
         try {
-            //----Loose Coupling----
-            ItemDAO itemDAO = new ItemDAOImpl();
             boolean isSaved = itemDAO.saveItem(new ItemDTO(code, name, qty, price));
-            //boolean isSaved = ItemDAOImpl.saveItem(new ItemDTO(code,name,qty,price));
 
             if (isSaved){
                 new Alert(Alert.AlertType.INFORMATION,"saved successfully").show();
@@ -72,8 +74,6 @@ public class ItemFormController implements Initializable {
         String id = txtCode.getText();
 
         try {
-            //----Loose Coupling----
-            ItemDAO itemDAO = new ItemDAOImpl();
             ItemDTO itemDTO = itemDAO.searchItem(id);
             // ItemDTO itemDTO = ItemDAOImpl.searchItem(id);
 
@@ -87,8 +87,6 @@ public class ItemFormController implements Initializable {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-
-
 
     }
 
@@ -104,8 +102,6 @@ public class ItemFormController implements Initializable {
         item.setQtyOnHand(qty);
         item.setPrice(price);*/
         try {
-            //----Loose Coupling----
-            ItemDAO itemDAO = new ItemDAOImpl();
             boolean isUpdated = itemDAO.updateItem(new ItemDTO(code, name, qty, price));
             // boolean isUpdated = ItemDAOImpl.updateItem(new ItemDTO(code,name,qty,price));
 
@@ -129,8 +125,6 @@ public class ItemFormController implements Initializable {
         String id = txtCode.getText();
 
         try {
-            //----Loose Coupling----
-            ItemDAO itemDAO = new ItemDAOImpl();
             boolean isDeleted = itemDAO.deleteItem(id);
             // boolean isDeleted = ItemDAOImpl.deleteItem(id);
 
@@ -153,8 +147,6 @@ public class ItemFormController implements Initializable {
     public void loadAllItems(){
 
         try {
-            //----Loose Coupling----
-            ItemDAO itemDAO = new ItemDAOImpl();
             ArrayList<ItemDTO> itemDTOs = itemDAO.loadAllItems();
            // ArrayList<ItemDTO> itemDTOS = ItemDAOImpl.loadAllItems();
 
