@@ -53,6 +53,7 @@ public class CustomerFormController implements Initializable {
         customer.setTp(tp);*/
 
         try {
+
            /* ----------------Tight Coupling----------------------
             CustomerDAOImpl customerDAOImpl = new CustomerDAOImpl();*/
 
