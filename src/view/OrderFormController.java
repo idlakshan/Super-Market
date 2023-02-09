@@ -1,5 +1,6 @@
 package view;
 
+import dao.CrudDAO;
 import dao.CustomerDAOImpl;
 import dao.ItemDAOImpl;
 import dao.OrderDAOImpl;
@@ -13,7 +14,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Duration;
 import model.CustomerDTO;
 import model.ItemDTO;
-import model.ItemDetailsDTO;
+import model.OrderDetailsDTO;
 import model.OrderDTO;
 import view.tm.CartTm;
 
@@ -23,7 +24,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class OrderFormController {
+public class OrderFormController{
     public ComboBox<String> cmbCusIds;
     public ComboBox<String> cmbItemIds;
     public TextField txtCusName;
@@ -115,8 +116,9 @@ public class OrderFormController {
 
     private void setItemData(String itemId) throws SQLException, ClassNotFoundException {
 
-        ItemDAOImpl itemDAO = new ItemDAOImpl();
-        ItemDTO itemDTO = itemDAO.searchItem(itemId);
+        ItemDAOImpl itemDAOImpl = new ItemDAOImpl();
+       // ItemDTO itemDTO =ItemDAOImpl.search(itemId);
+        ItemDTO itemDTO = itemDAOImpl.search(itemId);
 
         //ItemDTO itemDTO = ItemDAOImpl.searchItem(itemId);
 
@@ -132,7 +134,7 @@ public class OrderFormController {
 
     private void setCustomerData(String cusId) throws SQLException, ClassNotFoundException {
         CustomerDAOImpl customerDAOImpl=new CustomerDAOImpl();
-        CustomerDTO customerDTO = customerDAOImpl.searchCustomer(cusId);
+        CustomerDTO customerDTO = customerDAOImpl.search(cusId);
 
         // CustomerDTO customerDTO = CustomerDAOImpl.searchCustomer(cusId);
 
@@ -274,7 +276,7 @@ public class OrderFormController {
 
 
     public void placeOrderOnAction(ActionEvent event) {
-        ArrayList<ItemDetailsDTO> items=new ArrayList<>();
+        ArrayList<OrderDetailsDTO> items=new ArrayList<>();
         double total = 0;
 
 
@@ -283,18 +285,18 @@ public class OrderFormController {
             
             total=total+cartTm.getTotal();
             
-            /*items.add(new ItemDetailsDTO(
+            /*items.add(new OrderDetailsDTO(
                         cartTm.getCode(),
                         cartTm.getQty(),
                         cartTm.getPrice()
 
             ));*/
-            ItemDetailsDTO itemDetailsDTO =new ItemDetailsDTO();
-            itemDetailsDTO.setItemCode(cartTm.getCode());
-            itemDetailsDTO.setQtyForSell(cartTm.getQty());
-            itemDetailsDTO.setPrice(cartTm.getPrice());
+            OrderDetailsDTO orderDetailsDTO =new OrderDetailsDTO();
+            orderDetailsDTO.setItemCode(cartTm.getCode());
+            orderDetailsDTO.setQtyForSell(cartTm.getQty());
+            orderDetailsDTO.setPrice(cartTm.getPrice());
 
-            items.add(itemDetailsDTO);
+            items.add(orderDetailsDTO);
 
         }
 /*
@@ -333,13 +335,13 @@ public class OrderFormController {
 
        // ArrayList<String> customerIds = CustomerDAOImpl.loadCustomerIds();
 
-        ArrayList<String> customerIds = customerDAOImpl.loadCustomerIds();
+        ArrayList<String> customerIds = customerDAOImpl.loadIds();
         cmbCusIds.getItems().setAll(customerIds);
 
     }
     public void loadItemIds() throws SQLException, ClassNotFoundException {
         ItemDAOImpl itemDAO = new ItemDAOImpl();
-        ArrayList<String> itemIds = itemDAO.loadItemIds();
+        ArrayList<String> itemIds = itemDAO.loadIds();
 
         // ArrayList<String> itemIds= ItemDAOImpl.loadItemIds();
 

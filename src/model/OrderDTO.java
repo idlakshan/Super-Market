@@ -8,12 +8,12 @@ public class OrderDTO {
     private String orderDate;
     private String orderTime;
     private double cost;
-    private ArrayList<ItemDetailsDTO> items;
+    private ArrayList<OrderDetailsDTO> items;
 
     public OrderDTO() {
     }
 
-    public OrderDTO(String oderId, String customerId, String orderDate, String orderTime, double cost, ArrayList<ItemDetailsDTO> items) {
+    public OrderDTO(String oderId, String customerId, String orderDate, String orderTime, double cost, ArrayList<OrderDetailsDTO> items) {
         this.oderId = oderId;
         this.customerId = customerId;
         this.orderDate = orderDate;
@@ -62,11 +62,11 @@ public class OrderDTO {
         this.cost = cost;
     }
 
-    public ArrayList<ItemDetailsDTO> getItems() {
+    public ArrayList<OrderDetailsDTO> getItems() {
         return items;
     }
 
-    public void setItems(ArrayList<ItemDetailsDTO> items) {
+    public void setItems(ArrayList<OrderDetailsDTO> items) {
         this.items = items;
     }
 

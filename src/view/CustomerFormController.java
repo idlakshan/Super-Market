@@ -1,6 +1,6 @@
 package view;
 
-import dao.CustomerDAO;
+import dao.CrudDAO;
 import dao.CustomerDAOImpl;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -12,6 +12,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import model.CustomerDTO;
+import model.ItemDTO;
 
 import java.net.URL;
 import java.sql.SQLException;
@@ -32,7 +33,7 @@ public class CustomerFormController implements Initializable {
 
     //--------------Loose Coupling------------------
     //--------------Property Injection--------------
-    private final CustomerDAO customerDAO=new CustomerDAOImpl();
+    private final CrudDAO crudDAO=new CustomerDAOImpl();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -58,7 +59,7 @@ public class CustomerFormController implements Initializable {
             CustomerDAOImpl customerDAOImpl = new CustomerDAOImpl();*/
 
 
-            boolean isSaved = customerDAO.saveCustomer(new CustomerDTO(id, name, address, tp));
+            boolean isSaved = crudDAO.save(new CustomerDTO(id, name, address, tp));
 
             if (isSaved){
                 new Alert(Alert.AlertType.INFORMATION,"saved successfully").show();
@@ -82,14 +83,12 @@ public class CustomerFormController implements Initializable {
 
         try {
 
-
-            CustomerDTO customerDTO = customerDAO.searchCustomer(id);
+            CustomerDTO customerDTO = (CustomerDTO) crudDAO.search(id);
 
             txtId.setText(customerDTO.getId());
             txtName.setText(customerDTO.getName());
             txtAddress.setText(customerDTO.getAddress());
             txtTp.setText(customerDTO.getTp());
-
            /* if (customerDTO.equals(null)){
                 new Alert(Alert.AlertType.WARNING,"Error").show();
             }*/
@@ -117,7 +116,7 @@ public class CustomerFormController implements Initializable {
         customer.setTp(tp);*/
 
         try {
-            boolean isUpdated = customerDAO.updateCustomer(new CustomerDTO(id, name, address, tp));
+            boolean isUpdated = crudDAO.update(new CustomerDTO(id, name, address, tp));
 
             if (isUpdated){
                 new Alert(Alert.AlertType.INFORMATION,"Updated successfully").show();
@@ -139,7 +138,7 @@ public class CustomerFormController implements Initializable {
         String id = txtId.getText();
 
         try {
-            boolean isDeleted = customerDAO.deleteCustomer(id);
+            boolean isDeleted = crudDAO.delete(id);
 
             if (isDeleted){
                 new Alert(Alert.AlertType.INFORMATION,"Deleted successfully").show();
@@ -160,7 +159,7 @@ public class CustomerFormController implements Initializable {
     public void loadAllCustomers(){
 
         try {
-            ArrayList<CustomerDTO> customerDTOS = customerDAO.loadAllCustomers();
+            ArrayList<CustomerDTO> customerDTOS = crudDAO.loadAll();
 
             colCode.setCellValueFactory(new PropertyValueFactory<>("id"));
             colName.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -179,6 +178,5 @@ public class CustomerFormController implements Initializable {
             e.printStackTrace();
         }
     }
-
 
 }

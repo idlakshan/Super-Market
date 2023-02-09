@@ -1,7 +1,7 @@
 package dao;
 
 import db.DbConnection;
-import model.ItemDetailsDTO;
+import model.OrderDetailsDTO;
 import model.OrderDTO;
 
 import java.sql.Connection;
@@ -80,18 +80,18 @@ public class OrderDAOImpl {
         return false;
     }
 
-    private boolean saveOrderDetails(String orderId, ArrayList<ItemDetailsDTO> items) throws SQLException, ClassNotFoundException {
-        for (ItemDetailsDTO itemDetailsDTO : items
+    private boolean saveOrderDetails(String orderId, ArrayList<OrderDetailsDTO> items) throws SQLException, ClassNotFoundException {
+        for (OrderDetailsDTO orderDetailsDTO : items
         ) {
             PreparedStatement statement = DbConnection.getInstance().
                     getConnection().prepareStatement("insert into `order detail` values(?,?,?,?)");
-            statement.setObject(1, itemDetailsDTO.getItemCode());
+            statement.setObject(1, orderDetailsDTO.getItemCode());
             statement.setObject(2, orderId);
-            statement.setObject(3, itemDetailsDTO.getQtyForSell());
-            statement.setObject(4, itemDetailsDTO.getPrice());
+            statement.setObject(3, orderDetailsDTO.getQtyForSell());
+            statement.setObject(4, orderDetailsDTO.getPrice());
 
             if (statement.executeUpdate() > 0) {
-                if (updateQty(itemDetailsDTO.getItemCode(), itemDetailsDTO.getQtyForSell())) {
+                if (updateQty(orderDetailsDTO.getItemCode(), orderDetailsDTO.getQtyForSell())) {
 
                 } else {
                     return false;

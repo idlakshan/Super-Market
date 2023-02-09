@@ -1,14 +1,14 @@
 package model;
 
-public class ItemDetailsDTO {
+public class OrderDetailsDTO {
     private String itemCode;
     private int qtyForSell;
     private double price;
 
-    public ItemDetailsDTO() {
+    public OrderDetailsDTO() {
     }
 
-    public ItemDetailsDTO(String itemCode, int qtyForSell, double price) {
+    public OrderDetailsDTO(String itemCode, int qtyForSell, double price) {
         this.itemCode = itemCode;
         this.qtyForSell = qtyForSell;
         this.price = price;
@@ -40,7 +40,7 @@ public class ItemDetailsDTO {
 
     @Override
     public String toString() {
-        return "ItemDetailsDTO{" +
+        return "OrderDetailsDTO{" +
                 "itemCode='" + itemCode + '\'' +
                 ", qty=" + qtyForSell +
                 ", price=" + price +
