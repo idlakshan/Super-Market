@@ -1,9 +1,9 @@
-package view;
+package controller;
 
 import dao.CrudDAO;
-import dao.CustomerDAOImpl;
-import dao.ItemDAOImpl;
-import dao.OrderDAOImpl;
+import dao.custom.impl.CustomerDAOImpl;
+import dao.custom.impl.ItemDAOImpl;
+import dao.custom.impl.OrderDAOImpl;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -331,19 +331,15 @@ public class OrderFormController{
     }
 
     public void loadCustomerIds() throws SQLException, ClassNotFoundException {
-        CustomerDAOImpl customerDAOImpl=new CustomerDAOImpl();
-
-       // ArrayList<String> customerIds = CustomerDAOImpl.loadCustomerIds();
+        CrudDAO<CustomerDTO,String> customerDAOImpl=new CustomerDAOImpl();
 
         ArrayList<String> customerIds = customerDAOImpl.loadIds();
         cmbCusIds.getItems().setAll(customerIds);
 
     }
     public void loadItemIds() throws SQLException, ClassNotFoundException {
-        ItemDAOImpl itemDAO = new ItemDAOImpl();
+        CrudDAO<ItemDTO,String> itemDAO = new ItemDAOImpl();
         ArrayList<String> itemIds = itemDAO.loadIds();
-
-        // ArrayList<String> itemIds= ItemDAOImpl.loadItemIds();
 
         cmbItemIds.getItems().setAll(itemIds);
     }

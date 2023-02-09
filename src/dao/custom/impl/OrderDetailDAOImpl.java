@@ -1,13 +1,14 @@
-package dao;
+package dao.custom.impl;
 
+import dao.CrudDAO;
+import dao.custom.OrderDetailDAO;
 import model.CustomerDTO;
 import model.OrderDetailsDTO;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class OrderDetailDAOImpl implements CrudDAO<OrderDetailsDTO,String>{
-
+public class OrderDetailDAOImpl implements OrderDetailDAO {
     @Override
     public boolean save(OrderDetailsDTO dto) throws SQLException, ClassNotFoundException {
         return false;
@@ -37,4 +38,5 @@ public class OrderDetailDAOImpl implements CrudDAO<OrderDetailsDTO,String>{
     public ArrayList<String> loadIds() throws SQLException, ClassNotFoundException {
         return null;
     }
+
 }

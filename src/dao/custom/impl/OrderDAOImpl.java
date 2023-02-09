@@ -1,5 +1,7 @@
-package dao;
+package dao.custom.impl;
 
+import dao.SQLUtil;
+import dao.custom.OrderDAO;
 import db.DbConnection;
 import model.OrderDetailsDTO;
 import model.OrderDTO;
@@ -10,12 +12,44 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class OrderDAOImpl {
+public class OrderDAOImpl implements OrderDAO {
 
+    @Override
+    public boolean save(OrderDTO dto) throws SQLException, ClassNotFoundException {
+        return false;
+    }
+
+    @Override
+    public boolean update(OrderDTO dto) throws SQLException, ClassNotFoundException {
+        return false;
+    }
+
+    @Override
+    public OrderDTO search(String s) throws SQLException, ClassNotFoundException {
+        return null;
+    }
+
+    @Override
+    public boolean delete(String s) throws SQLException, ClassNotFoundException {
+        return false;
+    }
+
+    @Override
+    public ArrayList<OrderDTO> loadAll() throws SQLException, ClassNotFoundException {
+        return null;
+    }
+
+    @Override
+    public ArrayList<String> loadIds() throws SQLException, ClassNotFoundException {
+        return null;
+    }
+
+    //==============================================End CrudDAO============================================
+
+    @Override
     public String getOrderId() throws SQLException, ClassNotFoundException {
-        PreparedStatement statement = DbConnection.getInstance().
-                getConnection().prepareStatement("select oId from `order` order by oId desc limit 1 ");
-        ResultSet resultSet = statement.executeQuery();
+
+        ResultSet resultSet =SQLUtil.executeQuery("select oId from `order` order by oId desc limit 1");
 
         if (resultSet.next()){
             int tempId = Integer.parseInt(resultSet.getString(1).split("-")[1]);
@@ -35,11 +69,17 @@ public class OrderDAOImpl {
         }
     }
 
+    @Override
+    public boolean updateQty(String itemCode, int qty) throws SQLException, ClassNotFoundException {
+        boolean b = SQLUtil.executeUpdate("update item set qtyOnHand=(qtyOnHand-" + qty + ")where code ='" + itemCode + "'");
+        return b;
+    }
 
+    @Override
     public boolean placeOrder(OrderDTO orderDTO) {
         Connection connection=null;
         try {
-            connection=DbConnection.getInstance().getConnection();
+             connection=DbConnection.getInstance().getConnection();
             connection.setAutoCommit(false);
             PreparedStatement statement = connection.prepareStatement("insert into `order` values(?,?,?,?,?)");
             statement.setObject(1, orderDTO.getOderId());
@@ -102,13 +142,6 @@ public class OrderDAOImpl {
 
         }
         return true;
-
-    }
-
-    private boolean updateQty(String itemCode, int qty) throws SQLException, ClassNotFoundException {
-        PreparedStatement statement = DbConnection.getInstance().
-                getConnection().prepareStatement("update item set qtyOnHand=(qtyOnHand-" + qty + ")where code ='" + itemCode + "'");
-        return statement.executeUpdate() > 0;
 
     }
 

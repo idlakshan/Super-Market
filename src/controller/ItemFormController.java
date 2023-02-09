@@ -1,7 +1,7 @@
-package view;
+package controller;
 
 import dao.CrudDAO;
-import dao.ItemDAOImpl;
+import dao.custom.impl.ItemDAOImpl;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
@@ -11,7 +11,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
-import model.CustomerDTO;
 import model.ItemDTO;
 
 import java.net.URL;
@@ -164,14 +163,6 @@ public class ItemFormController implements Initializable {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-    }
-    public void setData(){
-        ItemDTO itemDTO=new ItemDTO();
-
-        txtCode.setText(itemDTO.getCode());
-        txtName.setText(itemDTO.getName());
-        txtQty.setText(String.valueOf(itemDTO.getQtyOnHand()));
-        txtPrice.setText(String.valueOf(itemDTO.getPrice()));
     }
 
 }

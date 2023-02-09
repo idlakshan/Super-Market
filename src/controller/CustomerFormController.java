@@ -1,7 +1,7 @@
-package view;
+package controller;
 
 import dao.CrudDAO;
-import dao.CustomerDAOImpl;
+import dao.custom.impl.CustomerDAOImpl;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
@@ -12,7 +12,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import model.CustomerDTO;
-import model.ItemDTO;
 
 import java.net.URL;
 import java.sql.SQLException;
