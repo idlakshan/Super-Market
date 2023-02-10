@@ -52,6 +52,8 @@ public class OrderFormController{
 
     private final ItemDAO itemDAO = new ItemDAOImpl();
     private final CustomerDAO customerDAO=new CustomerDAOImpl();
+    private final CrudDAO<CustomerDTO,String> customerDAOImpl=new CustomerDAOImpl();
+    private final CrudDAO<ItemDTO,String> itemDAOImpl = new ItemDAOImpl();
 
 
     int removeRow=-1;
@@ -104,8 +106,7 @@ public class OrderFormController{
            removeRow=(int)newValue;
         });
 
-
-        }
+    }
 
     private void setOrderId() {
 
@@ -240,7 +241,7 @@ public class OrderFormController{
     }
 
 
-    public void placeOrderOnAction(ActionEvent event) {
+    public void placeOrderOnAction(ActionEvent event) throws SQLException, ClassNotFoundException {
         ArrayList<OrderDetailsDTO> items=new ArrayList<>();
         double total = 0;
 
@@ -251,10 +252,10 @@ public class OrderFormController{
             
             items.add(new OrderDetailsDTO(cartTm.getCode(), cartTm.getQty(), cartTm.getPrice()));
         }
-        OrderDTO orderDTO=new OrderDTO(lblOrderId.getText(), cmbCusIds.getValue(), lblDate.getText(), lblTime.getText(), total, items);
-
-       OrderDAOImpl orderDAOImpl = new OrderDAOImpl();
-        boolean isSaved = orderDAOImpl.placeOrder(orderDTO);
+          //  OrderDTO orderDTO=new OrderDTO(lblOrderId.getText(), cmbCusIds.getValue(), lblDate.getText(), lblTime.getText(), total, items);
+             CrudDAO<OrderDTO,String> crudDAO = new OrderDAOImpl();
+             // boolean isSaved = orderDAOImpl.save(orderDTO);
+             boolean isSaved = crudDAO.save(new OrderDTO(lblOrderId.getText(), cmbCusIds.getValue(), lblDate.getText(), lblTime.getText(), total, items));
 
         if (isSaved){
             new Alert(Alert.AlertType.CONFIRMATION,"Success").show();
@@ -266,16 +267,15 @@ public class OrderFormController{
     }
 
     public void loadCustomerIds() throws SQLException, ClassNotFoundException {
-        CrudDAO<CustomerDTO,String> customerDAOImpl=new CustomerDAOImpl();
+
 
         ArrayList<String> customerIds = customerDAOImpl.loadIds();
         cmbCusIds.getItems().setAll(customerIds);
 
     }
     public void loadItemIds() throws SQLException, ClassNotFoundException {
-        CrudDAO<ItemDTO,String> itemDAO = new ItemDAOImpl();
-        ArrayList<String> itemIds = itemDAO.loadIds();
 
+        ArrayList<String> itemIds = itemDAOImpl.loadIds();
         cmbItemIds.getItems().setAll(itemIds);
     }
 

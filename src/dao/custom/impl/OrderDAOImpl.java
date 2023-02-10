@@ -17,7 +17,43 @@ public class OrderDAOImpl implements OrderDAO {
 
     @Override
     public boolean save(OrderDTO dto) throws SQLException, ClassNotFoundException {
+        Connection connection=DbConnection.getInstance().getConnection();
+        try {
+            connection.setAutoCommit(false);
+
+            if ( SQLUtil.executeUpdate("insert into `order` values(?,?,?,?,?)",dto.getOderId(),dto.getCustomerId(),dto.getOrderDate(),
+                    dto.getOrderTime(),dto.getCost())) {
+                OrderDetailDAO orderDetailDAO=new OrderDetailDAOImpl();
+
+                if ( orderDetailDAO.saveOrderDetails(dto.getOderId(), dto.getItems())){
+                    connection.commit();
+                    return true;
+                }else {
+                    connection.rollback();
+                    return false;
+                }
+
+            } else {
+                connection.rollback();
+                return false;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        finally {
+            try {
+
+                connection.setAutoCommit(true);
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
         return false;
+
     }
 
     @Override
@@ -68,53 +104,6 @@ public class OrderDAOImpl implements OrderDAO {
         }else {
             return "O-001";
         }
-    }
-
-    @Override
-    public boolean placeOrder(OrderDTO orderDTO) {
-        Connection connection=null;
-        try {
-            connection=DbConnection.getInstance().getConnection();
-            connection.setAutoCommit(false);
-            PreparedStatement statement = connection.prepareStatement("insert into `order` values(?,?,?,?,?)");
-            statement.setObject(1, orderDTO.getOderId());
-            statement.setObject(2, orderDTO.getCustomerId());
-            statement.setObject(3, orderDTO.getOrderDate());
-            statement.setObject(4, orderDTO.getOrderTime());
-            statement.setObject(5, orderDTO.getCost());
-
-
-            if (statement.executeUpdate() > 0) {
-                OrderDetailDAO orderDetailDAO=new OrderDetailDAOImpl();
-
-                if ( orderDetailDAO.saveOrderDetails(orderDTO.getOderId(), orderDTO.getItems())){
-                    connection.commit();
-                        return true;
-                }else {
-                    connection.rollback();
-                    return false;
-                }
-
-            } else {
-                connection.rollback();
-                return false;
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        finally {
-            try {
-
-                connection.setAutoCommit(true);
-
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        return false;
     }
 
 }

@@ -46,17 +46,7 @@ public class CustomerFormController implements Initializable {
         String address = txtAddress.getText();
         String tp = txtTp.getText();
 
-     /*   CustomerDTO customer=new CustomerDTO();
-        customer.setId(id);
-        customer.setName(name);
-        customer.setAddress(address);
-        customer.setTp(tp);*/
-
         try {
-
-           /* ----------------Tight Coupling----------------------
-            CustomerDAOImpl customerDAOImpl = new CustomerDAOImpl();*/
-
 
             boolean isSaved = crudDAO.save(new CustomerDTO(id, name, address, tp));
 
@@ -74,31 +64,24 @@ public class CustomerFormController implements Initializable {
             e.printStackTrace();
         }
 
-
     }
 
     public void customerSearchOnAction(ActionEvent event) {
         String id = txtId.getText();
 
         try {
-
             CustomerDTO customerDTO = (CustomerDTO) crudDAO.search(id);
 
             txtId.setText(customerDTO.getId());
             txtName.setText(customerDTO.getName());
             txtAddress.setText(customerDTO.getAddress());
             txtTp.setText(customerDTO.getTp());
-           /* if (customerDTO.equals(null)){
-                new Alert(Alert.AlertType.WARNING,"Error").show();
-            }*/
-
 
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-
 
     }
 
@@ -107,12 +90,6 @@ public class CustomerFormController implements Initializable {
         String name = txtName.getText();
         String address = txtAddress.getText();
         String tp = txtTp.getText();
-/*
-        CustomerDTO customer=new CustomerDTO();
-        customer.setId(id);
-        customer.setName(name);
-        customer.setAddress(address);
-        customer.setTp(tp);*/
 
         try {
             boolean isUpdated = crudDAO.update(new CustomerDTO(id, name, address, tp));
@@ -130,7 +107,6 @@ public class CustomerFormController implements Initializable {
             e.printStackTrace();
         }
 
-
     }
 
     public void customerDeleteOnAction(ActionEvent event) {
@@ -145,7 +121,6 @@ public class CustomerFormController implements Initializable {
             }else {
                 new Alert(Alert.AlertType.WARNING,"Error").show();
             }
-
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -164,7 +139,6 @@ public class CustomerFormController implements Initializable {
             colName.setCellValueFactory(new PropertyValueFactory<>("name"));
             colAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
             colTp.setCellValueFactory(new PropertyValueFactory<>("tp"));
-
 
 
             tblCustomer.getColumns().setAll(colCode,colName,colAddress,colTp);

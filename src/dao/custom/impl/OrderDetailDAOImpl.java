@@ -4,6 +4,7 @@ import dao.CrudDAO;
 import dao.SQLUtil;
 import dao.custom.OrderDetailDAO;
 import db.DbConnection;
+import javafx.scene.control.Alert;
 import model.CustomerDTO;
 import model.OrderDetailsDTO;
 
@@ -16,7 +17,6 @@ public class OrderDetailDAOImpl implements OrderDetailDAO {
     public boolean save(OrderDetailsDTO dto) throws SQLException, ClassNotFoundException {
         return false;
     }
-
 
     @Override
     public boolean update(OrderDetailsDTO dto) throws SQLException, ClassNotFoundException {
@@ -43,35 +43,25 @@ public class OrderDetailDAOImpl implements OrderDetailDAO {
         return null;
     }
 
-   // ===================================================================================
-
     @Override
     public boolean updateQty(String itemCode, int qty) throws SQLException, ClassNotFoundException {
        return SQLUtil.executeUpdate("update item set qtyOnHand=(qtyOnHand-" + qty + ")where code ='" + itemCode + "'");
     }
 
-
     @Override
     public boolean saveOrderDetails(String orderId, ArrayList<OrderDetailsDTO> items) throws SQLException, ClassNotFoundException {
         for (OrderDetailsDTO orderDetailsDTO : items
         ) {
-            PreparedStatement statement = DbConnection.getInstance().
-                    getConnection().prepareStatement("insert into `order detail` values(?,?,?,?)");
-            statement.setObject(1, orderDetailsDTO.getItemCode());
-            statement.setObject(2, orderId);
-            statement.setObject(3, orderDetailsDTO.getQtyForSell());
-            statement.setObject(4, orderDetailsDTO.getPrice());
-
-            if (statement.executeUpdate() > 0) {
+            if (SQLUtil.executeUpdate("insert into `order detail` values(?,?,?,?)",orderDetailsDTO.getItemCode(),orderId,
+                    orderDetailsDTO.getQtyForSell(),orderDetailsDTO.getPrice())) {
                 if (updateQty(orderDetailsDTO.getItemCode(), orderDetailsDTO.getQtyForSell())) {
-
+                   // new Alert(Alert.AlertType.CONFIRMATION,"okk");
                 } else {
                     return false;
                 }
             } else {
                 return false;
             }
-
         }
         return true;
     }
