@@ -4,11 +4,9 @@ import dao.CrudDAO;
 import dao.custom.CustomerDAO;
 import dao.custom.ItemDAO;
 import dao.custom.OrderDAO;
-import dao.custom.QueryDAO;
 import dao.custom.impl.CustomerDAOImpl;
 import dao.custom.impl.ItemDAOImpl;
 import dao.custom.impl.OrderDAOImpl;
-import dao.custom.impl.QueryDAOImpl;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -54,7 +52,6 @@ public class OrderFormController{
 
     private final ItemDAO itemDAO = new ItemDAOImpl();
     private final CustomerDAO customerDAO=new CustomerDAOImpl();
-    private final QueryDAO queryDAO=new QueryDAOImpl();
 
 
     int removeRow=-1;
@@ -105,7 +102,6 @@ public class OrderFormController{
         });
         tblOrder.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
            removeRow=(int)newValue;
-            //System.out.println("new value "+removeRow);
         });
 
 
@@ -180,7 +176,6 @@ public class OrderFormController{
 
     }
 
-    //ObservableList<CartTm> observableList= FXCollections.observableArrayList();
     ArrayList<CartTm> arrayList=new ArrayList<>();
 
     public void addCartOnAction(ActionEvent event) {
@@ -195,36 +190,14 @@ public class OrderFormController{
          return;
         }
 
-      /*  CartTm cartTm=new CartTm(
-                cmbItemIds.getValue(),
-                cmbCusIds.getValue(),
-                name,
-                qty,
-                price,
-                total
-        );*/
-        String itemIds = cmbItemIds.getValue();
-        String cusIds = cmbCusIds.getValue();
-
-        CartTm cartTm=new CartTm();
-
-        cartTm.setCode(itemIds);
-        cartTm.setCusId(cusIds);
-        cartTm.setName(name);
-        cartTm.setQty(qty);
-        cartTm.setPrice(price);
-        cartTm.setTotal(total);
-
+        CartTm cartTm=new CartTm(cmbItemIds.getValue(), cmbCusIds.getValue(), name, qty, price, total);
 
         int rowNumber= isExits(cartTm);
         System.out.println("Row No eka : "+rowNumber);
 
-
         if (rowNumber==-1){
-           // observableList.add(cartTm);
             arrayList.add(cartTm);
         }else {
-          // CartTm cartTm1=observableList.get(rowNumber);
             CartTm cartTm1 = arrayList.get(rowNumber);
             CartTm newTm=new CartTm(
                     cartTm1.getCode(),
@@ -238,19 +211,13 @@ public class OrderFormController{
                 new Alert(Alert.AlertType.WARNING,"Invalid QTY").show();
                 return;
             }
-
-           //observableList.remove(rowNumber);
             arrayList.remove(rowNumber);
-         // observableList.add(newTm);
             arrayList.add(newTm);
-
         }
 
-       // tblOrder.setItems(observableList);
         tblOrder.setItems(FXCollections.observableArrayList(arrayList));
         calculateCost();
     }
-
 
      public int isExits(CartTm cartTm){
         for (int i = 0; i <arrayList.size() ; i++) {
@@ -273,51 +240,18 @@ public class OrderFormController{
     }
 
 
-
-
-
     public void placeOrderOnAction(ActionEvent event) {
         ArrayList<OrderDetailsDTO> items=new ArrayList<>();
         double total = 0;
-
 
         for (CartTm cartTm:arrayList
              ) {
             
             total=total+cartTm.getTotal();
             
-            /*items.add(new OrderDetailsDTO(
-                        cartTm.getCode(),
-                        cartTm.getQty(),
-                        cartTm.getPrice()
-
-            ));*/
-            OrderDetailsDTO orderDetailsDTO =new OrderDetailsDTO();
-            orderDetailsDTO.setItemCode(cartTm.getCode());
-            orderDetailsDTO.setQtyForSell(cartTm.getQty());
-            orderDetailsDTO.setPrice(cartTm.getPrice());
-
-            items.add(orderDetailsDTO);
-
+            items.add(new OrderDetailsDTO(cartTm.getCode(), cartTm.getQty(), cartTm.getPrice()));
         }
-/*
-        OrderDTO orderDTO=new OrderDTO(
-                "O-001",
-                cmbCusIds.getValue(),
-                lblDate.getText(),
-                lblTime.getText(),
-                total,
-                items
-
-        );
-*/
-        OrderDTO orderDTO =new OrderDTO();
-        orderDTO.setOderId(lblOrderId.getText());
-        orderDTO.setCustomerId(cmbCusIds.getValue());
-        orderDTO.setOrderDate(lblDate.getText());
-        orderDTO.setOrderTime(lblTime.getText());
-        orderDTO.setCost(total);
-        orderDTO.setItems(items);
+        OrderDTO orderDTO=new OrderDTO(lblOrderId.getText(), cmbCusIds.getValue(), lblDate.getText(), lblTime.getText(), total, items);
 
        OrderDAOImpl orderDAOImpl = new OrderDAOImpl();
         boolean isSaved = orderDAOImpl.placeOrder(orderDTO);

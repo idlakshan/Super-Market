@@ -2,6 +2,7 @@ package dao.custom.impl;
 
 import dao.SQLUtil;
 import dao.custom.OrderDAO;
+import dao.custom.OrderDetailDAO;
 import db.DbConnection;
 import model.OrderDetailsDTO;
 import model.OrderDTO;
@@ -70,16 +71,10 @@ public class OrderDAOImpl implements OrderDAO {
     }
 
     @Override
-    public boolean updateQty(String itemCode, int qty) throws SQLException, ClassNotFoundException {
-        boolean b = SQLUtil.executeUpdate("update item set qtyOnHand=(qtyOnHand-" + qty + ")where code ='" + itemCode + "'");
-        return b;
-    }
-
-    @Override
     public boolean placeOrder(OrderDTO orderDTO) {
         Connection connection=null;
         try {
-             connection=DbConnection.getInstance().getConnection();
+            connection=DbConnection.getInstance().getConnection();
             connection.setAutoCommit(false);
             PreparedStatement statement = connection.prepareStatement("insert into `order` values(?,?,?,?,?)");
             statement.setObject(1, orderDTO.getOderId());
@@ -90,7 +85,9 @@ public class OrderDAOImpl implements OrderDAO {
 
 
             if (statement.executeUpdate() > 0) {
-                if (saveOrderDetails(orderDTO.getOderId(), orderDTO.getItems())){
+                OrderDetailDAO orderDetailDAO=new OrderDetailDAOImpl();
+
+                if ( orderDetailDAO.saveOrderDetails(orderDTO.getOderId(), orderDTO.getItems())){
                     connection.commit();
                         return true;
                 }else {
@@ -118,31 +115,6 @@ public class OrderDAOImpl implements OrderDAO {
             }
         }
         return false;
-    }
-
-    private boolean saveOrderDetails(String orderId, ArrayList<OrderDetailsDTO> items) throws SQLException, ClassNotFoundException {
-        for (OrderDetailsDTO orderDetailsDTO : items
-        ) {
-            PreparedStatement statement = DbConnection.getInstance().
-                    getConnection().prepareStatement("insert into `order detail` values(?,?,?,?)");
-            statement.setObject(1, orderDetailsDTO.getItemCode());
-            statement.setObject(2, orderId);
-            statement.setObject(3, orderDetailsDTO.getQtyForSell());
-            statement.setObject(4, orderDetailsDTO.getPrice());
-
-            if (statement.executeUpdate() > 0) {
-                if (updateQty(orderDetailsDTO.getItemCode(), orderDetailsDTO.getQtyForSell())) {
-
-                } else {
-                    return false;
-                }
-            } else {
-                return false;
-            }
-
-        }
-        return true;
-
     }
 
 }
