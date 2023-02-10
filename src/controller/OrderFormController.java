@@ -1,9 +1,14 @@
 package controller;
 
 import dao.CrudDAO;
+import dao.custom.CustomerDAO;
+import dao.custom.ItemDAO;
+import dao.custom.OrderDAO;
+import dao.custom.QueryDAO;
 import dao.custom.impl.CustomerDAOImpl;
 import dao.custom.impl.ItemDAOImpl;
 import dao.custom.impl.OrderDAOImpl;
+import dao.custom.impl.QueryDAOImpl;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -25,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class OrderFormController{
+
     public ComboBox<String> cmbCusIds;
     public ComboBox<String> cmbItemIds;
     public TextField txtCusName;
@@ -46,6 +52,9 @@ public class OrderFormController{
     public Label lblTotal;
     public Label lblOrderId;
 
+    private final ItemDAO itemDAO = new ItemDAOImpl();
+    private final CustomerDAO customerDAO=new CustomerDAOImpl();
+    private final QueryDAO queryDAO=new QueryDAOImpl();
 
 
     int removeRow=-1;
@@ -115,12 +124,7 @@ public class OrderFormController{
     }
 
     private void setItemData(String itemId) throws SQLException, ClassNotFoundException {
-
-        ItemDAOImpl itemDAOImpl = new ItemDAOImpl();
-       // ItemDTO itemDTO =ItemDAOImpl.search(itemId);
-        ItemDTO itemDTO = itemDAOImpl.search(itemId);
-
-        //ItemDTO itemDTO = ItemDAOImpl.searchItem(itemId);
+        ItemDTO itemDTO = itemDAO.search(itemId);
 
         if (itemDTO ==null){
             new Alert(Alert.AlertType.WARNING,"Empty results set");
@@ -133,10 +137,7 @@ public class OrderFormController{
 
 
     private void setCustomerData(String cusId) throws SQLException, ClassNotFoundException {
-        CustomerDAOImpl customerDAOImpl=new CustomerDAOImpl();
-        CustomerDTO customerDTO = customerDAOImpl.search(cusId);
-
-        // CustomerDTO customerDTO = CustomerDAOImpl.searchCustomer(cusId);
+        CustomerDTO customerDTO = customerDAO.search(cusId);
 
         if (customerDTO ==null){
             new Alert(Alert.AlertType.WARNING,"Empty results set");

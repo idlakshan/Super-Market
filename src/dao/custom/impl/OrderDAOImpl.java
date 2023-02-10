@@ -56,7 +56,7 @@ public class OrderDAOImpl implements OrderDAO {
 
             tempId=tempId+1;
 
-            if (tempId<9){
+            if (tempId<10){
                 return "O-00"+tempId;
             }else if(tempId<99){
                 return "O-0"+tempId;
