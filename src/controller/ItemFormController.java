@@ -1,6 +1,7 @@
 package controller;
 
 import bo.ItemBOImpl;
+import bo.ItemBo;
 import dao.CrudDAO;
 import dao.custom.ItemDAO;
 import dao.custom.impl.ItemDAOImpl;
@@ -35,7 +36,7 @@ public class ItemFormController implements Initializable {
 
     //----Loose Coupling---------
     //----Property Injection-----
-
+    ItemBo itemBO =new ItemBOImpl();
 
 
     @Override
@@ -50,10 +51,8 @@ public class ItemFormController implements Initializable {
         double price=Double.parseDouble(txtPrice.getText());
 
         try {
-            //Loose Coupling,DI
-            ItemBOImpl itemBOImpl=new ItemBOImpl();
 
-            if ( itemBOImpl.saveItem(new ItemDTO(code, name, qty, price))){
+            if ( itemBO.saveItem(new ItemDTO(code, name, qty, price))){
                 new Alert(Alert.AlertType.INFORMATION,"saved successfully").show();
                 loadAllItems();
             }else {
@@ -71,10 +70,8 @@ public class ItemFormController implements Initializable {
         String id = txtCode.getText();
 
         try {
-           // Loose Coupling
-            // Di
-            ItemBOImpl itemBOImpl=new ItemBOImpl();
-            ItemDTO itemDTO = itemBOImpl.searchItem(id);
+
+            ItemDTO itemDTO = itemBO.searchItem(id);
 
             txtCode.setText(itemDTO.getCode());
             txtName.setText(itemDTO.getName());
@@ -96,11 +93,8 @@ public class ItemFormController implements Initializable {
         double price=Double.parseDouble(txtPrice.getText());
 
         try {
-          // loose Coupling,DI
-            ItemBOImpl itemBOImpl=new ItemBOImpl();
 
-
-            if (itemBOImpl.updateItem(new ItemDTO(code, name, qty, price))){
+            if (itemBO.updateItem(new ItemDTO(code, name, qty, price))){
                 new Alert(Alert.AlertType.INFORMATION,"Updated successfully").show();
                 loadAllItems();
             }else {
@@ -121,9 +115,9 @@ public class ItemFormController implements Initializable {
 
         try {
            // loose Couping,DI
-            ItemBOImpl itemBOImpl=new ItemBOImpl();
 
-            if ( itemBOImpl.deleteItem(id)){
+
+            if ( itemBO.deleteItem(id)){
                 new Alert(Alert.AlertType.INFORMATION,"Deleted successfully").show();
                 loadAllItems();
 
@@ -143,8 +137,8 @@ public class ItemFormController implements Initializable {
 
         try {
            // loose coupling,DI
-            ItemBOImpl itemBOImpl=new ItemBOImpl();
-            ArrayList<ItemDTO> allItems = itemBOImpl.getAllItems();
+
+            ArrayList<ItemDTO> allItems = itemBO.getAllItems();
 
 
             colCode.setCellValueFactory(new PropertyValueFactory<>("code"));

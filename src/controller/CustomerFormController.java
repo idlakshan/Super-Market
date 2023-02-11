@@ -1,5 +1,6 @@
 package controller;
 
+import bo.CustomerBO;
 import bo.CustomerBOImpl;
 import dao.CrudDAO;
 import dao.custom.CustomerDAO;
@@ -35,6 +36,8 @@ public class CustomerFormController implements Initializable {
     //--------------Loose Coupling------------------
     //--------------Property Injection--------------
   //  private final CustomerDAO customerDAO=new CustomerDAOImpl();
+    private final CustomerBO customerBO =new CustomerBOImpl();
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -50,12 +53,7 @@ public class CustomerFormController implements Initializable {
 
         try {
 
-            //Loose Coupling
-            //DI
-            CustomerBOImpl customerBOImpl=new CustomerBOImpl();
-
-
-            if (customerBOImpl.saveCustomer(new CustomerDTO(id, name, address, tp))){
+            if (customerBO.saveCustomer(new CustomerDTO(id, name, address, tp))){
                 new Alert(Alert.AlertType.INFORMATION,"saved successfully").show();
                 loadAllCustomers();
             }else {
@@ -75,10 +73,8 @@ public class CustomerFormController implements Initializable {
         String id = txtId.getText();
 
         try {
-             //loose coupling
-            //DI
-            CustomerBOImpl customerBOImpl=new CustomerBOImpl();
-            CustomerDTO customerDTO = customerBOImpl.searchCustomer(id);
+
+            CustomerDTO customerDTO = customerBO.searchCustomer(id);
 
             txtId.setText(customerDTO.getId());
             txtName.setText(customerDTO.getName());
@@ -100,11 +96,8 @@ public class CustomerFormController implements Initializable {
         String tp = txtTp.getText();
 
         try {
-            //loose Coupling
-            //DI
-            CustomerBOImpl customerBOImpl=new CustomerBOImpl();
 
-            if ( customerBOImpl.updateCustomer(new CustomerDTO(id, name, address, tp))){
+            if ( customerBO.updateCustomer(new CustomerDTO(id, name, address, tp))){
                 new Alert(Alert.AlertType.INFORMATION,"Updated successfully").show();
                 loadAllCustomers();
             }else {
@@ -123,11 +116,8 @@ public class CustomerFormController implements Initializable {
         String id = txtId.getText();
 
         try {
-            //loose Coupling
-            //DI
-            CustomerBOImpl customerBOImpl=new CustomerBOImpl();
 
-            if (customerBOImpl.deleteCustomer(id)){
+            if (customerBO.deleteCustomer(id)){
                 new Alert(Alert.AlertType.INFORMATION,"Deleted successfully").show();
                 loadAllCustomers();
             }else {
@@ -145,10 +135,8 @@ public class CustomerFormController implements Initializable {
     public void loadAllCustomers(){
 
         try {
-            //loose Coupling
-            //DI
-            CustomerBOImpl customerBOImpl=new CustomerBOImpl();
-            ArrayList<CustomerDTO> allCustomers = customerBOImpl.getAllCustomers();
+
+            ArrayList<CustomerDTO> allCustomers = customerBO.getAllCustomers();
 
             colCode.setCellValueFactory(new PropertyValueFactory<>("id"));
             colName.setCellValueFactory(new PropertyValueFactory<>("name"));
