@@ -1,12 +1,7 @@
 package controller;
 
-import bo.PurchaseOrderBOImpl;
-import dao.CrudDAO;
-import dao.custom.CustomerDAO;
-import dao.custom.ItemDAO;
-import dao.custom.OrderDAO;
-import dao.custom.impl.CustomerDAOImpl;
-import dao.custom.impl.ItemDAOImpl;
+import bo.OrderBO;
+import bo.OrderBOImpl;
 import dao.custom.impl.OrderDAOImpl;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -57,6 +52,7 @@ public class OrderFormController{
     private final CrudDAO<ItemDTO,String> itemDAOImpl = new ItemDAOImpl();
     private final CrudDAO<OrderDTO,String> crudDAO = new OrderDAOImpl();
 */
+   private final OrderBO orderBO =new OrderBOImpl();
 
     int removeRow=-1;
 
@@ -123,10 +119,7 @@ public class OrderFormController{
 
     private void setItemData(String itemId) throws SQLException, ClassNotFoundException {
 
-        //loose Coupling
-        //DI
-        PurchaseOrderBOImpl purchaseOrderBOImpl=new PurchaseOrderBOImpl();
-        ItemDTO itemDTO = purchaseOrderBOImpl.setItemDataForTextFields(itemId);
+        ItemDTO itemDTO = orderBO.setItemDataForTextFields(itemId);
 
         if (itemDTO ==null){
             new Alert(Alert.AlertType.WARNING,"Empty results set");
@@ -140,10 +133,7 @@ public class OrderFormController{
 
     private void setCustomerData(String cusId) throws SQLException, ClassNotFoundException {
 
-        //loose Coupling
-        //DI
-        PurchaseOrderBOImpl purchaseOrderBOImpl=new PurchaseOrderBOImpl();
-        CustomerDTO customerDTO = purchaseOrderBOImpl.setCustomerDataForTextFields(cusId);
+        CustomerDTO customerDTO = orderBO.setCustomerDataForTextFields(cusId);
 
 
         if (customerDTO ==null){
@@ -260,10 +250,8 @@ public class OrderFormController{
             
             items.add(new OrderDetailsDTO(cartTm.getCode(), cartTm.getQty(), cartTm.getPrice()));
         }
-        //loose Coupling
-        //DI
-        PurchaseOrderBOImpl purchaseOrderBOImpl=new PurchaseOrderBOImpl();
-       boolean isSaved= purchaseOrderBOImpl.saveOrder(new OrderDTO(lblOrderId.getText(), cmbCusIds.getValue(), lblDate.getText(), lblTime.getText(), total, items));
+
+       boolean isSaved= orderBO.saveOrder(new OrderDTO(lblOrderId.getText(), cmbCusIds.getValue(), lblDate.getText(), lblTime.getText(), total, items));
 
         if (isSaved){
             new Alert(Alert.AlertType.CONFIRMATION,"Success").show();
@@ -275,18 +263,12 @@ public class OrderFormController{
     }
 
     public void loadCustomerIds() throws SQLException, ClassNotFoundException {
-        //loose Coupling
-        //DI
-        PurchaseOrderBOImpl purchaseOrderBOImpl=new PurchaseOrderBOImpl();
-        ArrayList<String> customerIds = purchaseOrderBOImpl.loadCustomerIdsForCombo();
+        ArrayList<String> customerIds = orderBO.loadCustomerIdsForCombo();
         cmbCusIds.getItems().setAll(customerIds);
 
     }
     public void loadItemIds() throws SQLException, ClassNotFoundException {
-        //loose Coupling
-        //DI
-        PurchaseOrderBOImpl purchaseOrderBOImpl=new PurchaseOrderBOImpl();
-        ArrayList<String> itemIds = purchaseOrderBOImpl.loadItemIdsForCombo();
+        ArrayList<String> itemIds = orderBO.loadItemIdsForCombo();
         cmbItemIds.getItems().setAll(itemIds);
     }
 }

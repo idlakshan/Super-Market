@@ -16,29 +16,29 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class PurchaseOrderBOImpl {
+public class OrderBOImpl implements OrderBO {
 
     private final ItemDAO itemDAO = new ItemDAOImpl();
-    private final CustomerDAO customerDAO=new CustomerDAOImpl();
-    private final CrudDAO<CustomerDTO,String> customerDAOImpl=new CustomerDAOImpl();
-    private final CrudDAO<ItemDTO,String> itemDAOImpl = new ItemDAOImpl();
-    private final CrudDAO<OrderDTO,String> crudDAO = new OrderDAOImpl();
-    private final QueryDAO queryDAO=new QueryDAOImpl();
+    private final CustomerDAO customerDAO = new CustomerDAOImpl();
+    private final CrudDAO<CustomerDTO, String> customerDAOImpl = new CustomerDAOImpl();
+    private final CrudDAO<ItemDTO, String> itemDAOImpl = new ItemDAOImpl();
+    private final CrudDAO<OrderDTO, String> crudDAO = new OrderDAOImpl();
+    private final QueryDAO queryDAO = new QueryDAOImpl();
 
-
+    @Override
     public boolean purchaseOrder(OrderDTO dto) throws SQLException, ClassNotFoundException {
-        Connection connection= DbConnection.getInstance().getConnection();
+        Connection connection = DbConnection.getInstance().getConnection();
         try {
             connection.setAutoCommit(false);
 
-            if ( SQLUtil.executeUpdate("insert into `order` values(?,?,?,?,?)",dto.getOderId(),dto.getCustomerId(),dto.getOrderDate(),
-                    dto.getOrderTime(),dto.getCost())) {
-                OrderDetailDAO orderDetailDAO=new OrderDetailDAOImpl();
+            if (SQLUtil.executeUpdate("insert into `order` values(?,?,?,?,?)", dto.getOderId(), dto.getCustomerId(), dto.getOrderDate(),
+                    dto.getOrderTime(), dto.getCost())) {
+                OrderDetailDAO orderDetailDAO = new OrderDetailDAOImpl();
 
-                if ( orderDetailDAO.saveOrderDetails(dto.getOderId(), dto.getItems())){
+                if (orderDetailDAO.saveOrderDetails(dto.getOderId(), dto.getItems())) {
                     connection.commit();
                     return true;
-                }else {
+                } else {
                     connection.rollback();
                     return false;
                 }
@@ -52,8 +52,7 @@ public class PurchaseOrderBOImpl {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
-        }
-        finally {
+        } finally {
             try {
 
                 connection.setAutoCommit(true);
@@ -65,25 +64,32 @@ public class PurchaseOrderBOImpl {
         return false;
 
     }
+
+    @Override
     public ItemDTO setItemDataForTextFields(String itemId) throws SQLException, ClassNotFoundException {
-       return itemDAO.search(itemId);
-       // return itemDTO;
+        return itemDAO.search(itemId);
+        // return itemDTO;
     }
+
+    @Override
     public CustomerDTO setCustomerDataForTextFields(String cusId) throws SQLException, ClassNotFoundException {
-     return customerDAO.search(cusId);
-
+        return customerDAO.search(cusId);
     }
-      public ArrayList<String> loadCustomerIdsForCombo() throws SQLException, ClassNotFoundException {
-         return customerDAOImpl.loadIds();
 
-      }
+    @Override
+    public ArrayList<String> loadCustomerIdsForCombo() throws SQLException, ClassNotFoundException {
+        return customerDAOImpl.loadIds();
+    }
 
+    @Override
     public ArrayList<String> loadItemIdsForCombo() throws SQLException, ClassNotFoundException {
-      return itemDAOImpl.loadIds();
+        return itemDAOImpl.loadIds();
 
     }
+
+    @Override
     public boolean saveOrder(OrderDTO orderDTO) throws SQLException, ClassNotFoundException {
-      return crudDAO.save(orderDTO);
+        return crudDAO.save(orderDTO);
 
     }
 

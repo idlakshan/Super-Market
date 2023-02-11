@@ -1,15 +1,10 @@
 package dao.custom.impl;
 
-import bo.PurchaseOrderBOImpl;
+import bo.OrderBOImpl;
 import dao.SQLUtil;
 import dao.custom.OrderDAO;
-import dao.custom.OrderDetailDAO;
-import db.DbConnection;
-import model.OrderDetailsDTO;
 import model.OrderDTO;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -56,9 +51,9 @@ public class OrderDAOImpl implements OrderDAO {
         return false;
 */
 
-        PurchaseOrderBOImpl purchaseOrderBOImpl=new PurchaseOrderBOImpl();
+        OrderBOImpl orderBOImpl =new OrderBOImpl();
         try {
-          return  purchaseOrderBOImpl.purchaseOrder(dto);
+          return  orderBOImpl.purchaseOrder(dto);
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {

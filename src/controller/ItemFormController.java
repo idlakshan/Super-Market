@@ -1,10 +1,7 @@
 package controller;
 
 import bo.ItemBOImpl;
-import bo.ItemBo;
-import dao.CrudDAO;
-import dao.custom.ItemDAO;
-import dao.custom.impl.ItemDAOImpl;
+import bo.ItemBO;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
@@ -36,7 +33,7 @@ public class ItemFormController implements Initializable {
 
     //----Loose Coupling---------
     //----Property Injection-----
-    ItemBo itemBO =new ItemBOImpl();
+    ItemBO itemBO =new ItemBOImpl();
 
 
     @Override
