@@ -1,5 +1,6 @@
 package controller;
 
+import bo.ItemBOImpl;
 import dao.CrudDAO;
 import dao.custom.ItemDAO;
 import dao.custom.impl.ItemDAOImpl;
@@ -34,7 +35,7 @@ public class ItemFormController implements Initializable {
 
     //----Loose Coupling---------
     //----Property Injection-----
-   private final ItemDAO itemDAO = new ItemDAOImpl();
+
 
 
     @Override
@@ -48,16 +49,11 @@ public class ItemFormController implements Initializable {
         int qty = Integer.parseInt(txtQty.getText());
         double price=Double.parseDouble(txtPrice.getText());
 
-       /* ItemDTO item=new ItemDTO();
-        item.setCode(code);
-        item.setName(name);
-        item.setQtyOnHand(qty);
-        item.setPrice(price);*/
-
         try {
-            boolean isSaved = itemDAO.save(new ItemDTO(code, name, qty, price));
+            //Loose Coupling,DI
+            ItemBOImpl itemBOImpl=new ItemBOImpl();
 
-            if (isSaved){
+            if ( itemBOImpl.saveItem(new ItemDTO(code, name, qty, price))){
                 new Alert(Alert.AlertType.INFORMATION,"saved successfully").show();
                 loadAllItems();
             }else {
@@ -75,8 +71,10 @@ public class ItemFormController implements Initializable {
         String id = txtCode.getText();
 
         try {
-            ItemDTO itemDTO = (ItemDTO) itemDAO.search(id);
-            // ItemDTO itemDTO = ItemDAOImpl.searchItem(id);
+           // Loose Coupling
+            // Di
+            ItemBOImpl itemBOImpl=new ItemBOImpl();
+            ItemDTO itemDTO = itemBOImpl.searchItem(id);
 
             txtCode.setText(itemDTO.getCode());
             txtName.setText(itemDTO.getName());
@@ -97,16 +95,12 @@ public class ItemFormController implements Initializable {
         int qty = Integer.parseInt(txtQty.getText());
         double price=Double.parseDouble(txtPrice.getText());
 
-       /* ItemDTO item=new ItemDTO();
-        item.setCode(code);
-        item.setName(name);
-        item.setQtyOnHand(qty);
-        item.setPrice(price);*/
         try {
-            boolean isUpdated = itemDAO.update(new ItemDTO(code, name, qty, price));
-            // boolean isUpdated = ItemDAOImpl.updateItem(new ItemDTO(code,name,qty,price));
+          // loose Coupling,DI
+            ItemBOImpl itemBOImpl=new ItemBOImpl();
 
-            if (isUpdated){
+
+            if (itemBOImpl.updateItem(new ItemDTO(code, name, qty, price))){
                 new Alert(Alert.AlertType.INFORMATION,"Updated successfully").show();
                 loadAllItems();
             }else {
@@ -126,10 +120,10 @@ public class ItemFormController implements Initializable {
         String id = txtCode.getText();
 
         try {
-            boolean isDeleted = itemDAO.delete(id);
-            // boolean isDeleted = ItemDAOImpl.deleteItem(id);
+           // loose Couping,DI
+            ItemBOImpl itemBOImpl=new ItemBOImpl();
 
-            if (isDeleted){
+            if ( itemBOImpl.deleteItem(id)){
                 new Alert(Alert.AlertType.INFORMATION,"Deleted successfully").show();
                 loadAllItems();
 
@@ -148,8 +142,10 @@ public class ItemFormController implements Initializable {
     public void loadAllItems(){
 
         try {
-            ArrayList<ItemDTO> itemDTOs = itemDAO.loadAll();
-           // ArrayList<ItemDTO> itemDTOS = ItemDAOImpl.loadAllItems();
+           // loose coupling,DI
+            ItemBOImpl itemBOImpl=new ItemBOImpl();
+            ArrayList<ItemDTO> allItems = itemBOImpl.getAllItems();
+
 
             colCode.setCellValueFactory(new PropertyValueFactory<>("code"));
             colName.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -157,7 +153,7 @@ public class ItemFormController implements Initializable {
             colPrice.setCellValueFactory(new PropertyValueFactory<>("price"));
 
             tblItem.getColumns().setAll(colCode,colName,colQty,colPrice);
-            tblItem.setItems(FXCollections.observableArrayList(itemDTOs));
+            tblItem.setItems(FXCollections.observableArrayList(allItems));
 
         } catch (SQLException e) {
             e.printStackTrace();
