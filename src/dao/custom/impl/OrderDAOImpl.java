@@ -1,6 +1,6 @@
 package dao.custom.impl;
 
-import bo.OrderBOImpl;
+import bo.custom.impl.OrderBOImpl;
 import dao.SQLUtil;
 import dao.custom.OrderDAO;
 import model.OrderDTO;

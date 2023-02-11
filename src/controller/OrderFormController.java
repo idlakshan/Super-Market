@@ -1,7 +1,7 @@
 package controller;
 
-import bo.OrderBO;
-import bo.OrderBOImpl;
+import bo.custom.OrderBO;
+import bo.custom.impl.OrderBOImpl;
 import dao.custom.impl.OrderDAOImpl;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;

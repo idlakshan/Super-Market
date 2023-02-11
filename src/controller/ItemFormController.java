@@ -1,7 +1,7 @@
 package controller;
 
-import bo.ItemBOImpl;
-import bo.ItemBO;
+import bo.custom.impl.ItemBOImpl;
+import bo.custom.ItemBO;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;

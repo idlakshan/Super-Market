@@ -1,5 +1,6 @@
-package bo;
+package bo.custom.impl;
 
+import bo.custom.OrderBO;
 import dao.CrudDAO;
 import dao.SQLUtil;
 import dao.custom.CustomerDAO;

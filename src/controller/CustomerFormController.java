@@ -1,10 +1,7 @@
 package controller;
 
-import bo.CustomerBO;
-import bo.CustomerBOImpl;
-import dao.CrudDAO;
-import dao.custom.CustomerDAO;
-import dao.custom.impl.CustomerDAOImpl;
+import bo.custom.CustomerBO;
+import bo.custom.impl.CustomerBOImpl;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
