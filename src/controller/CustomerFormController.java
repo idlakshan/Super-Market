@@ -1,6 +1,7 @@
 package controller;
 
 import dao.CrudDAO;
+import dao.custom.CustomerDAO;
 import dao.custom.impl.CustomerDAOImpl;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -32,7 +33,7 @@ public class CustomerFormController implements Initializable {
 
     //--------------Loose Coupling------------------
     //--------------Property Injection--------------
-    private final CrudDAO crudDAO=new CustomerDAOImpl();
+    private final CustomerDAO customerDAO=new CustomerDAOImpl();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -48,7 +49,7 @@ public class CustomerFormController implements Initializable {
 
         try {
 
-            boolean isSaved = crudDAO.save(new CustomerDTO(id, name, address, tp));
+            boolean isSaved = customerDAO.save(new CustomerDTO(id, name, address, tp));
 
             if (isSaved){
                 new Alert(Alert.AlertType.INFORMATION,"saved successfully").show();
@@ -70,7 +71,7 @@ public class CustomerFormController implements Initializable {
         String id = txtId.getText();
 
         try {
-            CustomerDTO customerDTO = (CustomerDTO) crudDAO.search(id);
+            CustomerDTO customerDTO = (CustomerDTO) customerDAO.search(id);
 
             txtId.setText(customerDTO.getId());
             txtName.setText(customerDTO.getName());
@@ -92,7 +93,7 @@ public class CustomerFormController implements Initializable {
         String tp = txtTp.getText();
 
         try {
-            boolean isUpdated = crudDAO.update(new CustomerDTO(id, name, address, tp));
+            boolean isUpdated = customerDAO.update(new CustomerDTO(id, name, address, tp));
 
             if (isUpdated){
                 new Alert(Alert.AlertType.INFORMATION,"Updated successfully").show();
@@ -113,7 +114,7 @@ public class CustomerFormController implements Initializable {
         String id = txtId.getText();
 
         try {
-            boolean isDeleted = crudDAO.delete(id);
+            boolean isDeleted = customerDAO.delete(id);
 
             if (isDeleted){
                 new Alert(Alert.AlertType.INFORMATION,"Deleted successfully").show();
@@ -133,7 +134,7 @@ public class CustomerFormController implements Initializable {
     public void loadAllCustomers(){
 
         try {
-            ArrayList<CustomerDTO> customerDTOS = crudDAO.loadAll();
+            ArrayList<CustomerDTO> customerDTOS = customerDAO.loadAll();
 
             colCode.setCellValueFactory(new PropertyValueFactory<>("id"));
             colName.setCellValueFactory(new PropertyValueFactory<>("name"));

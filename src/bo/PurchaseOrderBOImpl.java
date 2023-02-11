@@ -66,21 +66,25 @@ public class PurchaseOrderBOImpl {
 
     }
     public ItemDTO setItemDataForTextFields(String itemId) throws SQLException, ClassNotFoundException {
-        ItemDTO itemDTO = itemDAO.search(itemId);
-        return itemDTO;
+       return itemDAO.search(itemId);
+       // return itemDTO;
     }
     public CustomerDTO setCustomerDataForTextFields(String cusId) throws SQLException, ClassNotFoundException {
-        CustomerDTO customerDTO = customerDAO.search(cusId);
-        return customerDTO;
+     return customerDAO.search(cusId);
+
     }
       public ArrayList<String> loadCustomerIdsForCombo() throws SQLException, ClassNotFoundException {
-          ArrayList<String> cusIds = customerDAOImpl.loadIds();
-          return cusIds;
+         return customerDAOImpl.loadIds();
+
       }
 
     public ArrayList<String> loadItemIdsForCombo() throws SQLException, ClassNotFoundException {
-        ArrayList<String> itemIds = itemDAOImpl.loadIds();
-        return itemIds;
+      return itemDAOImpl.loadIds();
+
+    }
+    public boolean saveOrder(OrderDTO orderDTO) throws SQLException, ClassNotFoundException {
+      return crudDAO.save(orderDTO);
+
     }
 
 }

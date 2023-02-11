@@ -125,8 +125,6 @@ public class OrderFormController{
         PurchaseOrderBOImpl purchaseOrderBOImpl=new PurchaseOrderBOImpl();
         ItemDTO itemDTO = purchaseOrderBOImpl.setItemDataForTextFields(itemId);
 
-        // ItemDTO itemDTO = itemDAO.search(itemId);
-
         if (itemDTO ==null){
             new Alert(Alert.AlertType.WARNING,"Empty results set");
         }else{
@@ -141,7 +139,6 @@ public class OrderFormController{
         PurchaseOrderBOImpl purchaseOrderBOImpl=new PurchaseOrderBOImpl();
         CustomerDTO customerDTO = purchaseOrderBOImpl.setCustomerDataForTextFields(cusId);
 
-        //CustomerDTO customerDTO = customerDAO.search(cusId);
 
         if (customerDTO ==null){
             new Alert(Alert.AlertType.WARNING,"Empty results set");
@@ -257,8 +254,8 @@ public class OrderFormController{
             
             items.add(new OrderDetailsDTO(cartTm.getCode(), cartTm.getQty(), cartTm.getPrice()));
         }
-              CrudDAO<OrderDTO,String> crudDAO = new OrderDAOImpl();
-             boolean isSaved = crudDAO.save(new OrderDTO(lblOrderId.getText(), cmbCusIds.getValue(), lblDate.getText(), lblTime.getText(), total, items));
+        PurchaseOrderBOImpl purchaseOrderBOImpl=new PurchaseOrderBOImpl();
+       boolean isSaved= purchaseOrderBOImpl.saveOrder(new OrderDTO(lblOrderId.getText(), cmbCusIds.getValue(), lblDate.getText(), lblTime.getText(), total, items));
 
         if (isSaved){
             new Alert(Alert.AlertType.CONFIRMATION,"Success").show();
@@ -272,14 +269,12 @@ public class OrderFormController{
     public void loadCustomerIds() throws SQLException, ClassNotFoundException {
         PurchaseOrderBOImpl purchaseOrderBOImpl=new PurchaseOrderBOImpl();
         ArrayList<String> customerIds = purchaseOrderBOImpl.loadCustomerIdsForCombo();
-        //ArrayList<String> customerIds = customerDAOImpl.loadIds();
         cmbCusIds.getItems().setAll(customerIds);
 
     }
     public void loadItemIds() throws SQLException, ClassNotFoundException {
         PurchaseOrderBOImpl purchaseOrderBOImpl=new PurchaseOrderBOImpl();
         ArrayList<String> itemIds = purchaseOrderBOImpl.loadItemIdsForCombo();
-       // ArrayList<String> itemIds = itemDAOImpl.loadIds();
         cmbItemIds.getItems().setAll(itemIds);
     }
 }

@@ -1,6 +1,7 @@
 package controller;
 
 import dao.CrudDAO;
+import dao.custom.ItemDAO;
 import dao.custom.impl.ItemDAOImpl;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -33,7 +34,7 @@ public class ItemFormController implements Initializable {
 
     //----Loose Coupling---------
     //----Property Injection-----
-   private final CrudDAO crudDAO = new ItemDAOImpl();
+   private final ItemDAO itemDAO = new ItemDAOImpl();
 
 
     @Override
@@ -54,7 +55,7 @@ public class ItemFormController implements Initializable {
         item.setPrice(price);*/
 
         try {
-            boolean isSaved = crudDAO.save(new ItemDTO(code, name, qty, price));
+            boolean isSaved = itemDAO.save(new ItemDTO(code, name, qty, price));
 
             if (isSaved){
                 new Alert(Alert.AlertType.INFORMATION,"saved successfully").show();
@@ -74,7 +75,7 @@ public class ItemFormController implements Initializable {
         String id = txtCode.getText();
 
         try {
-            ItemDTO itemDTO = (ItemDTO) crudDAO.search(id);
+            ItemDTO itemDTO = (ItemDTO) itemDAO.search(id);
             // ItemDTO itemDTO = ItemDAOImpl.searchItem(id);
 
             txtCode.setText(itemDTO.getCode());
@@ -102,7 +103,7 @@ public class ItemFormController implements Initializable {
         item.setQtyOnHand(qty);
         item.setPrice(price);*/
         try {
-            boolean isUpdated = crudDAO.update(new ItemDTO(code, name, qty, price));
+            boolean isUpdated = itemDAO.update(new ItemDTO(code, name, qty, price));
             // boolean isUpdated = ItemDAOImpl.updateItem(new ItemDTO(code,name,qty,price));
 
             if (isUpdated){
@@ -125,7 +126,7 @@ public class ItemFormController implements Initializable {
         String id = txtCode.getText();
 
         try {
-            boolean isDeleted = crudDAO.delete(id);
+            boolean isDeleted = itemDAO.delete(id);
             // boolean isDeleted = ItemDAOImpl.deleteItem(id);
 
             if (isDeleted){
@@ -147,7 +148,7 @@ public class ItemFormController implements Initializable {
     public void loadAllItems(){
 
         try {
-            ArrayList<ItemDTO> itemDTOs = crudDAO.loadAll();
+            ArrayList<ItemDTO> itemDTOs = itemDAO.loadAll();
            // ArrayList<ItemDTO> itemDTOS = ItemDAOImpl.loadAllItems();
 
             colCode.setCellValueFactory(new PropertyValueFactory<>("code"));
