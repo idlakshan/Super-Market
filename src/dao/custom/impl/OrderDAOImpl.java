@@ -1,5 +1,6 @@
 package dao.custom.impl;
 
+import bo.PurchaseOrderBOImpl;
 import dao.SQLUtil;
 import dao.custom.OrderDAO;
 import dao.custom.OrderDetailDAO;
@@ -16,8 +17,8 @@ import java.util.ArrayList;
 public class OrderDAOImpl implements OrderDAO {
 
     @Override
-    public boolean save(OrderDTO dto) throws SQLException, ClassNotFoundException {
-        Connection connection=DbConnection.getInstance().getConnection();
+    public boolean save(OrderDTO dto)  {
+      /*  Connection connection=DbConnection.getInstance().getConnection();
         try {
             connection.setAutoCommit(false);
 
@@ -53,7 +54,17 @@ public class OrderDAOImpl implements OrderDAO {
             }
         }
         return false;
+*/
 
+        PurchaseOrderBOImpl purchaseOrderBOImpl=new PurchaseOrderBOImpl();
+        try {
+          return  purchaseOrderBOImpl.purchaseOrder(dto);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+          return false;
     }
 
     @Override

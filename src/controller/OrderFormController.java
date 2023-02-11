@@ -1,5 +1,6 @@
 package controller;
 
+import bo.PurchaseOrderBOImpl;
 import dao.CrudDAO;
 import dao.custom.CustomerDAO;
 import dao.custom.ItemDAO;
@@ -50,11 +51,12 @@ public class OrderFormController{
     public Label lblTotal;
     public Label lblOrderId;
 
-    private final ItemDAO itemDAO = new ItemDAOImpl();
+   /* private final ItemDAO itemDAO = new ItemDAOImpl();
     private final CustomerDAO customerDAO=new CustomerDAOImpl();
     private final CrudDAO<CustomerDTO,String> customerDAOImpl=new CustomerDAOImpl();
     private final CrudDAO<ItemDTO,String> itemDAOImpl = new ItemDAOImpl();
-
+    private final CrudDAO<OrderDTO,String> crudDAO = new OrderDAOImpl();
+*/
 
     int removeRow=-1;
 
@@ -79,7 +81,6 @@ public class OrderFormController{
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-
         cmbCusIds.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             try {
                 setCustomerData(newValue);
@@ -121,7 +122,10 @@ public class OrderFormController{
     }
 
     private void setItemData(String itemId) throws SQLException, ClassNotFoundException {
-        ItemDTO itemDTO = itemDAO.search(itemId);
+        PurchaseOrderBOImpl purchaseOrderBOImpl=new PurchaseOrderBOImpl();
+        ItemDTO itemDTO = purchaseOrderBOImpl.setItemDataForTextFields(itemId);
+
+        // ItemDTO itemDTO = itemDAO.search(itemId);
 
         if (itemDTO ==null){
             new Alert(Alert.AlertType.WARNING,"Empty results set");
@@ -134,7 +138,10 @@ public class OrderFormController{
 
 
     private void setCustomerData(String cusId) throws SQLException, ClassNotFoundException {
-        CustomerDTO customerDTO = customerDAO.search(cusId);
+        PurchaseOrderBOImpl purchaseOrderBOImpl=new PurchaseOrderBOImpl();
+        CustomerDTO customerDTO = purchaseOrderBOImpl.setCustomerDataForTextFields(cusId);
+
+        //CustomerDTO customerDTO = customerDAO.search(cusId);
 
         if (customerDTO ==null){
             new Alert(Alert.AlertType.WARNING,"Empty results set");
@@ -143,10 +150,8 @@ public class OrderFormController{
            txtAddress.setText(customerDTO.getAddress());
            txtTp.setText(customerDTO.getTp());
 
-
         }
     }
-
 
     private void loadDateAndTime() {
         Date date=new Date();
@@ -252,9 +257,7 @@ public class OrderFormController{
             
             items.add(new OrderDetailsDTO(cartTm.getCode(), cartTm.getQty(), cartTm.getPrice()));
         }
-          //  OrderDTO orderDTO=new OrderDTO(lblOrderId.getText(), cmbCusIds.getValue(), lblDate.getText(), lblTime.getText(), total, items);
-             CrudDAO<OrderDTO,String> crudDAO = new OrderDAOImpl();
-             // boolean isSaved = orderDAOImpl.save(orderDTO);
+              CrudDAO<OrderDTO,String> crudDAO = new OrderDAOImpl();
              boolean isSaved = crudDAO.save(new OrderDTO(lblOrderId.getText(), cmbCusIds.getValue(), lblDate.getText(), lblTime.getText(), total, items));
 
         if (isSaved){
@@ -267,16 +270,16 @@ public class OrderFormController{
     }
 
     public void loadCustomerIds() throws SQLException, ClassNotFoundException {
-
-
-        ArrayList<String> customerIds = customerDAOImpl.loadIds();
+        PurchaseOrderBOImpl purchaseOrderBOImpl=new PurchaseOrderBOImpl();
+        ArrayList<String> customerIds = purchaseOrderBOImpl.loadCustomerIdsForCombo();
+        //ArrayList<String> customerIds = customerDAOImpl.loadIds();
         cmbCusIds.getItems().setAll(customerIds);
 
     }
     public void loadItemIds() throws SQLException, ClassNotFoundException {
-
-        ArrayList<String> itemIds = itemDAOImpl.loadIds();
+        PurchaseOrderBOImpl purchaseOrderBOImpl=new PurchaseOrderBOImpl();
+        ArrayList<String> itemIds = purchaseOrderBOImpl.loadItemIdsForCombo();
+       // ArrayList<String> itemIds = itemDAOImpl.loadIds();
         cmbItemIds.getItems().setAll(itemIds);
     }
-
 }
