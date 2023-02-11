@@ -122,6 +122,9 @@ public class OrderFormController{
     }
 
     private void setItemData(String itemId) throws SQLException, ClassNotFoundException {
+
+        //loose Coupling
+        //DI
         PurchaseOrderBOImpl purchaseOrderBOImpl=new PurchaseOrderBOImpl();
         ItemDTO itemDTO = purchaseOrderBOImpl.setItemDataForTextFields(itemId);
 
@@ -136,6 +139,9 @@ public class OrderFormController{
 
 
     private void setCustomerData(String cusId) throws SQLException, ClassNotFoundException {
+
+        //loose Coupling
+        //DI
         PurchaseOrderBOImpl purchaseOrderBOImpl=new PurchaseOrderBOImpl();
         CustomerDTO customerDTO = purchaseOrderBOImpl.setCustomerDataForTextFields(cusId);
 
@@ -254,6 +260,8 @@ public class OrderFormController{
             
             items.add(new OrderDetailsDTO(cartTm.getCode(), cartTm.getQty(), cartTm.getPrice()));
         }
+        //loose Coupling
+        //DI
         PurchaseOrderBOImpl purchaseOrderBOImpl=new PurchaseOrderBOImpl();
        boolean isSaved= purchaseOrderBOImpl.saveOrder(new OrderDTO(lblOrderId.getText(), cmbCusIds.getValue(), lblDate.getText(), lblTime.getText(), total, items));
 
@@ -267,12 +275,16 @@ public class OrderFormController{
     }
 
     public void loadCustomerIds() throws SQLException, ClassNotFoundException {
+        //loose Coupling
+        //DI
         PurchaseOrderBOImpl purchaseOrderBOImpl=new PurchaseOrderBOImpl();
         ArrayList<String> customerIds = purchaseOrderBOImpl.loadCustomerIdsForCombo();
         cmbCusIds.getItems().setAll(customerIds);
 
     }
     public void loadItemIds() throws SQLException, ClassNotFoundException {
+        //loose Coupling
+        //DI
         PurchaseOrderBOImpl purchaseOrderBOImpl=new PurchaseOrderBOImpl();
         ArrayList<String> itemIds = purchaseOrderBOImpl.loadItemIdsForCombo();
         cmbItemIds.getItems().setAll(itemIds);
