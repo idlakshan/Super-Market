@@ -15,7 +15,7 @@ public class AppInitializer extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-        Parent parent= FXMLLoader.load(this.getClass().getResource("view/DashboardForm.fxml"));
+        Parent parent= FXMLLoader.load(this.getClass().getResource("lk/ijse/pos/view/LandingPageForm.fxml"));
         Scene scene=new Scene(parent);
         primaryStage.setScene(scene);
         primaryStage.setTitle("Login");
@@ -23,7 +23,7 @@ public class AppInitializer extends Application {
 
 
         //primaryStage.setMaximized(true);
-        Image image=new Image("view/images/shop.jpg");
+        Image image=new Image("lk/ijse/pos/view/images/shop.jpg");
         primaryStage.getIcons().add(image);
         primaryStage.centerOnScreen();
         primaryStage.show();
