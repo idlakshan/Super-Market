@@ -1,5 +1,6 @@
 package bo.custom;
 
+import bo.SuperBO;
 import model.CustomerDTO;
 import model.ItemDTO;
 import model.OrderDTO;
@@ -7,7 +8,7 @@ import model.OrderDTO;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public interface OrderBO {
+public interface OrderBO extends SuperBO {
 
     boolean purchaseOrder(OrderDTO dto) throws SQLException, ClassNotFoundException;
 

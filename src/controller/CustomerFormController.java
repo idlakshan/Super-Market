@@ -1,5 +1,6 @@
 package controller;
 
+import bo.BOFactory;
 import bo.custom.CustomerBO;
 import bo.custom.impl.CustomerBOImpl;
 import javafx.collections.FXCollections;
@@ -30,11 +31,7 @@ public class CustomerFormController implements Initializable {
     public TableColumn colAddress;
     public TableColumn colTp;
 
-    //--------------Loose Coupling------------------
-    //--------------Property Injection--------------
-  //  private final CustomerDAO customerDAO=new CustomerDAOImpl();
-    private final CustomerBO customerBO =new CustomerBOImpl();
-
+   private final CustomerBO customerBO= (CustomerBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.CUSTOMER);
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {

@@ -32,9 +32,9 @@ public class DAOFactory {
                 return new OrderDetailDAOImpl();
             case QUERYDAO:
                 return new QueryDAOImpl();
+            default:return null;
         }
 
-        return null;
     }
 
 

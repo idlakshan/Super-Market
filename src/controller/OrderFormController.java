@@ -1,7 +1,9 @@
 package controller;
 
+import bo.BOFactory;
 import bo.custom.OrderBO;
 import bo.custom.impl.OrderBOImpl;
+import dao.DAOFactory;
 import dao.custom.impl.OrderDAOImpl;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -52,7 +54,7 @@ public class OrderFormController{
     private final CrudDAO<ItemDTO,String> itemDAOImpl = new ItemDAOImpl();
     private final CrudDAO<OrderDTO,String> crudDAO = new OrderDAOImpl();
 */
-   private final OrderBO orderBO =new OrderBOImpl();
+    private final OrderBO orderBO = (OrderBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.ORDER);
 
     int removeRow=-1;
 

@@ -1,7 +1,9 @@
 package controller;
 
+import bo.BOFactory;
 import bo.custom.impl.ItemBOImpl;
 import bo.custom.ItemBO;
+import dao.DAOFactory;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
@@ -30,11 +32,7 @@ public class ItemFormController implements Initializable {
     public TableColumn colQty;
     public TableColumn colPrice;
 
-
-    //----Loose Coupling---------
-    //----Property Injection-----
-    ItemBO itemBO =new ItemBOImpl();
-
+   private final ItemBO itemBO= (ItemBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.ITEM);
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
