@@ -2,11 +2,10 @@ package bo.custom.impl;
 
 import bo.custom.OrderBO;
 import dao.CrudDAO;
+import dao.DAOFactory;
 import dao.SQLUtil;
-import dao.custom.CustomerDAO;
-import dao.custom.ItemDAO;
-import dao.custom.OrderDetailDAO;
-import dao.custom.QueryDAO;
+import dao.SuperDAO;
+import dao.custom.*;
 import dao.custom.impl.*;
 import db.DbConnection;
 import model.CustomerDTO;
@@ -19,15 +18,21 @@ import java.util.ArrayList;
 
 public class OrderBOImpl implements OrderBO {
 
-    private final ItemDAO itemDAO = new ItemDAOImpl();
-    private final CustomerDAO customerDAO = new CustomerDAOImpl();
-    private final CrudDAO<CustomerDTO, String> customerDAOImpl = new CustomerDAOImpl();
-    private final CrudDAO<ItemDTO, String> itemDAOImpl = new ItemDAOImpl();
-    private final CrudDAO<OrderDTO, String> crudDAO = new OrderDAOImpl();
-    private final QueryDAO queryDAO = new QueryDAOImpl();
+    ItemDAO itemDAO = (ItemDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.ITEM);
+    CustomerDAO customerDAO = (CustomerDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.CUSTOMER);
+    OrderDAO orderDAO = (OrderDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.ORDER);
+    QueryDAO queryDAO = (QueryDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.QUERYDAO);
 
     @Override
     public boolean purchaseOrder(OrderDTO dto) throws SQLException, ClassNotFoundException {
+
+       // private final ItemDAO itemDAO = new ItemDAOImpl();
+      //  private final CustomerDAO customerDAO = new CustomerDAOImpl();
+        // private final OrderDAO crudDAO = new OrderDAOImpl();
+       // private final QueryDAO queryDAO = new QueryDAOImpl();
+
+
+
         Connection connection = DbConnection.getInstance().getConnection();
         try {
             connection.setAutoCommit(false);
@@ -69,7 +74,7 @@ public class OrderBOImpl implements OrderBO {
     @Override
     public ItemDTO setItemDataForTextFields(String itemId) throws SQLException, ClassNotFoundException {
         return itemDAO.search(itemId);
-        // return itemDTO;
+
     }
 
     @Override
@@ -79,18 +84,18 @@ public class OrderBOImpl implements OrderBO {
 
     @Override
     public ArrayList<String> loadCustomerIdsForCombo() throws SQLException, ClassNotFoundException {
-        return customerDAOImpl.loadIds();
+        return customerDAO.loadIds();
     }
 
     @Override
     public ArrayList<String> loadItemIdsForCombo() throws SQLException, ClassNotFoundException {
-        return itemDAOImpl.loadIds();
+        return itemDAO.loadIds();
 
     }
 
     @Override
     public boolean saveOrder(OrderDTO orderDTO) throws SQLException, ClassNotFoundException {
-        return crudDAO.save(orderDTO);
+        return orderDAO.save(orderDTO);
 
     }
 
