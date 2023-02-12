@@ -54,7 +54,7 @@ public class OrderFormController{
     private final CrudDAO<ItemDTO,String> itemDAOImpl = new ItemDAOImpl();
     private final CrudDAO<OrderDTO,String> crudDAO = new OrderDAOImpl();
 */
-    private final OrderBO orderBO = (OrderBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.ORDER);
+    private final  OrderBO orderBO = (OrderBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.ORDER);
 
     int removeRow=-1;
 
