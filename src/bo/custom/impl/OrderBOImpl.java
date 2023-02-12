@@ -18,20 +18,13 @@ import java.util.ArrayList;
 
 public class OrderBOImpl implements OrderBO {
 
-    ItemDAO itemDAO = (ItemDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.ITEM);
-    CustomerDAO customerDAO = (CustomerDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.CUSTOMER);
-    OrderDAO orderDAO = (OrderDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.ORDER);
-    QueryDAO queryDAO = (QueryDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.QUERYDAO);
+    private final ItemDAO itemDAO = (ItemDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.ITEM);
+    private final CustomerDAO customerDAO = (CustomerDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.CUSTOMER);
+    private final OrderDAO orderDAO = (OrderDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.ORDER);
+    private final QueryDAO queryDAO = (QueryDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.QUERYDAO);
 
     @Override
     public boolean purchaseOrder(OrderDTO dto) throws SQLException, ClassNotFoundException {
-
-       // private final ItemDAO itemDAO = new ItemDAOImpl();
-      //  private final CustomerDAO customerDAO = new CustomerDAOImpl();
-        // private final OrderDAO crudDAO = new OrderDAOImpl();
-       // private final QueryDAO queryDAO = new QueryDAOImpl();
-
-
 
         Connection connection = DbConnection.getInstance().getConnection();
         try {
